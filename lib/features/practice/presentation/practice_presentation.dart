@@ -17,7 +17,6 @@ class PracticePresentation extends StatefulWidget {
     super.key,
     required this.sessionInfo,
     required this.questionText,
-    required this.answerHint,
     required this.progressText,
     required this.elapsedText,
     required this.feedback,
@@ -34,7 +33,6 @@ class PracticePresentation extends StatefulWidget {
 
   final PracticeSessionInfo sessionInfo;
   final String questionText;
-  final String answerHint;
   final String progressText;
   final String elapsedText;
   final AnswerFeedback? feedback;
@@ -189,13 +187,6 @@ class _PracticePresentationState extends State<PracticePresentation>
                           fontWeight: FontWeight.w800,
                         ),
                       ),
-                      if (widget.answerHint.isNotEmpty) ...[
-                        const SizedBox(height: 4),
-                        Text(
-                          widget.answerHint,
-                          style: const TextStyle(color: _cGrayText),
-                        ),
-                      ],
                       const SizedBox(height: 10),
                       ScaleTransition(
                         scale: _scale,

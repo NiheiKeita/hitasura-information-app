@@ -73,7 +73,6 @@ class _PracticeContainerState extends State<PracticeContainer> {
         return PracticePresentation(
           sessionInfo: _controller.sessionInfo,
           questionText: _controller.questionText,
-          answerHint: _controller.answerHint,
           progressText: _controller.progressText,
           elapsedText: _controller.elapsedText,
           feedback: _controller.feedback,
@@ -159,10 +158,6 @@ class PracticeController extends ChangeNotifier {
 
   String get questionText {
     return _problem?.questionText ?? '';
-  }
-
-  String get answerHint {
-    return _problem?.hintText ?? '';
   }
 
   String get progressText {
