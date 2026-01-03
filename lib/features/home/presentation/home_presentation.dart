@@ -243,12 +243,12 @@ class _CategoryCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: SizedBox(
-          height: 60,
+          height: 92,
           child: Row(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: 72,
+                height: 72,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -281,31 +281,7 @@ class _CategoryCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: _cAccent,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'START',
-                      style: TextStyle(
-                        color: _cBg,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                      ),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(Icons.chevron_right, color: _cBg, size: 16),
-                  ],
-                ),
-              ),
+              const Icon(Icons.chevron_right, color: _cGrayText),
             ],
           ),
         ),

@@ -396,165 +396,42 @@ InfoProblem _flowHardSum(Random random) {
   );
 }
 
-InfoProblem _binaryToDecimalEasy(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.easy,
-      question: '1011',
-      answer: '11',
-      answerFormat: AnswerFormat.decimal,
-    );
+InfoProblem _binaryToDecimal(Random random, Difficulty difficulty) {
+  final range = _binaryRangeFor(difficulty);
+  final value = _randIn(random, range.$1, range.$2);
+  final binary = value.toRadixString(2);
+  return InfoProblem(
+    category: Category.binaryToDecimal,
+    difficulty: difficulty,
+    question: binary,
+    answer: '$value',
+    answerFormat: AnswerFormat.decimal,
+  );
+}
 
-InfoProblem _binaryToDecimalEasyAlt(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.easy,
-      question: '1101',
-      answer: '13',
-      answerFormat: AnswerFormat.decimal,
-    );
+InfoProblem _decimalToBinary(Random random, Difficulty difficulty) {
+  final range = _binaryRangeFor(difficulty);
+  final value = _randIn(random, range.$1, range.$2);
+  final binary = value.toRadixString(2);
+  return InfoProblem(
+    category: Category.decimalToBinary,
+    difficulty: difficulty,
+    question: '$value',
+    answer: binary,
+    answerFormat: AnswerFormat.binary,
+  );
+}
 
-InfoProblem _binaryToDecimalEasyAlt2(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.easy,
-      question: '10010',
-      answer: '18',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalNormal(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.normal,
-      question: '10101',
-      answer: '21',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalNormalAlt(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.normal,
-      question: '11100',
-      answer: '28',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalNormalAlt2(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.normal,
-      question: '100101',
-      answer: '37',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalNormalAlt3(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.normal,
-      question: '100000',
-      answer: '32',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalHard(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.hard,
-      question: '111001',
-      answer: '57',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalHardAlt(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.hard,
-      question: '110111',
-      answer: '55',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _binaryToDecimalHardAlt2(Random _) => const InfoProblem(
-      category: Category.binaryToDecimal,
-      difficulty: Difficulty.hard,
-      question: '1010101',
-      answer: '85',
-      answerFormat: AnswerFormat.decimal,
-    );
-
-InfoProblem _decimalToBinaryEasy(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.easy,
-      question: '13',
-      answer: '1101',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryEasyAlt(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.easy,
-      question: '9',
-      answer: '1001',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryEasyAlt2(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.easy,
-      question: '6',
-      answer: '110',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryNormal(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.normal,
-      question: '18',
-      answer: '10010',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryNormalAlt(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.normal,
-      question: '21',
-      answer: '10101',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryNormalAlt2(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.normal,
-      question: '28',
-      answer: '11100',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryNormalAlt3(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.normal,
-      question: '37',
-      answer: '100101',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryHard(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.hard,
-      question: '57',
-      answer: '111001',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryHardAlt(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.hard,
-      question: '55',
-      answer: '110111',
-      answerFormat: AnswerFormat.binary,
-    );
-
-InfoProblem _decimalToBinaryHardAlt2(Random _) => const InfoProblem(
-      category: Category.decimalToBinary,
-      difficulty: Difficulty.hard,
-      question: '85',
-      answer: '1010101',
-      answerFormat: AnswerFormat.binary,
-    );
+(int, int) _binaryRangeFor(Difficulty difficulty) {
+  switch (difficulty) {
+    case Difficulty.easy:
+      return (4, 15); // 3-4 bits
+    case Difficulty.normal:
+      return (16, 63); // 5-6 bits
+    case Difficulty.hard:
+      return (64, 255); // 7-8 bits
+  }
+}
 
 class _Template {
   const _Template({
@@ -569,204 +446,134 @@ class _Template {
 }
 
 final List<_Template> _templates = [
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.easy,
     build: _pseudocodeEasyAdd,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.easy,
     build: _pseudocodeEasySum,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.easy,
     build: _pseudocodeEasyArray,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.normal,
     build: _pseudocodeNormalSum,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.normal,
     build: _pseudocodeNormalIf,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.normal,
     build: _pseudocodeNormalWhile,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.normal,
     build: _pseudocodeNormalMultiply,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.hard,
     build: _pseudocodeHardNested,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.hard,
     build: _pseudocodeHardSwap,
   ),
-  const _Template(
+  _Template(
     category: Category.pseudocodeExecution,
     difficulty: Difficulty.hard,
     build: _pseudocodeHardOdd,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.easy,
     build: _flowEasyWhile,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.easy,
     build: _flowEasyFor,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.easy,
     build: _flowEasyIf,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.normal,
     build: _flowNormalBranch,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.normal,
     build: _flowNormalEvenCount,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.normal,
     build: _flowNormalReduce,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.normal,
     build: _flowNormalEvenSum,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.hard,
     build: _flowHardNested,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.hard,
     build: _flowHardWhile,
   ),
-  const _Template(
+  _Template(
     category: Category.controlFlowTrace,
     difficulty: Difficulty.hard,
     build: _flowHardSum,
   ),
-  const _Template(
+  _Template(
     category: Category.binaryToDecimal,
     difficulty: Difficulty.easy,
-    build: _binaryToDecimalEasy,
+    build: (random) => _binaryToDecimal(random, Difficulty.easy),
   ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.easy,
-    build: _binaryToDecimalEasyAlt,
-  ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.easy,
-    build: _binaryToDecimalEasyAlt2,
-  ),
-  const _Template(
+  _Template(
     category: Category.binaryToDecimal,
     difficulty: Difficulty.normal,
-    build: _binaryToDecimalNormal,
+    build: (random) => _binaryToDecimal(random, Difficulty.normal),
   ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.normal,
-    build: _binaryToDecimalNormalAlt,
-  ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.normal,
-    build: _binaryToDecimalNormalAlt2,
-  ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.normal,
-    build: _binaryToDecimalNormalAlt3,
-  ),
-  const _Template(
+  _Template(
     category: Category.binaryToDecimal,
     difficulty: Difficulty.hard,
-    build: _binaryToDecimalHard,
+    build: (random) => _binaryToDecimal(random, Difficulty.hard),
   ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.hard,
-    build: _binaryToDecimalHardAlt,
-  ),
-  const _Template(
-    category: Category.binaryToDecimal,
-    difficulty: Difficulty.hard,
-    build: _binaryToDecimalHardAlt2,
-  ),
-  const _Template(
+  _Template(
     category: Category.decimalToBinary,
     difficulty: Difficulty.easy,
-    build: _decimalToBinaryEasy,
+    build: (random) => _decimalToBinary(random, Difficulty.easy),
   ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.easy,
-    build: _decimalToBinaryEasyAlt,
-  ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.easy,
-    build: _decimalToBinaryEasyAlt2,
-  ),
-  const _Template(
+  _Template(
     category: Category.decimalToBinary,
     difficulty: Difficulty.normal,
-    build: _decimalToBinaryNormal,
+    build: (random) => _decimalToBinary(random, Difficulty.normal),
   ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.normal,
-    build: _decimalToBinaryNormalAlt,
-  ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.normal,
-    build: _decimalToBinaryNormalAlt2,
-  ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.normal,
-    build: _decimalToBinaryNormalAlt3,
-  ),
-  const _Template(
+  _Template(
     category: Category.decimalToBinary,
     difficulty: Difficulty.hard,
-    build: _decimalToBinaryHard,
-  ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.hard,
-    build: _decimalToBinaryHardAlt,
-  ),
-  const _Template(
-    category: Category.decimalToBinary,
-    difficulty: Difficulty.hard,
-    build: _decimalToBinaryHardAlt2,
+    build: (random) => _decimalToBinary(random, Difficulty.hard),
   ),
 ];
