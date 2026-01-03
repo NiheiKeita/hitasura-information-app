@@ -14,7 +14,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: ModeSelectPresentation(
-          category: Category.factorization,
+          category: Category.pseudocodeExecution,
           mode: PracticeMode.infinite,
           difficulty: Difficulty.normal,
           onModeChanged: (mode) => selectedMode = mode,

@@ -5,20 +5,26 @@ import '../../../widgets/bubbly_background.dart';
 import '../../../widgets/pressable_surface.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
+const _cMain = Color(0xFF0284C7);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
 class MenuPresentation extends StatelessWidget {
   const MenuPresentation({
     super.key,
-    required this.onOpenFactorIntro,
-    required this.onOpenPrimeIntro,
+    required this.onOpenPseudocodeIntro,
+    required this.onOpenControlFlowIntro,
+    required this.onOpenBinaryToDecimalIntro,
+    required this.onOpenDecimalToBinaryIntro,
+    required this.onOpenBinaryMixedIntro,
     required this.onOpenLicenses,
   });
 
-  final VoidCallback onOpenFactorIntro;
-  final VoidCallback onOpenPrimeIntro;
+  final VoidCallback onOpenPseudocodeIntro;
+  final VoidCallback onOpenControlFlowIntro;
+  final VoidCallback onOpenBinaryToDecimalIntro;
+  final VoidCallback onOpenDecimalToBinaryIntro;
+  final VoidCallback onOpenBinaryMixedIntro;
   final VoidCallback onOpenLicenses;
 
   @override
@@ -54,15 +60,33 @@ class MenuPresentation extends StatelessWidget {
               Column(
                 children: [
                   _MenuButton(
-                    label: '因数分解の遊び方',
-                    description: '簡単な説明と操作方法',
-                    onTap: onOpenFactorIntro,
+                    label: '疑似コードの実行結果',
+                    description: '変数と出力を追う',
+                    onTap: onOpenPseudocodeIntro,
                   ),
                   const SizedBox(height: 10),
                   _MenuButton(
-                    label: '素因数分解の遊び方',
-                    description: '簡単な説明と操作方法',
-                    onTap: onOpenPrimeIntro,
+                    label: 'if / for / while の処理追跡',
+                    description: '分岐とループの流れ',
+                    onTap: onOpenControlFlowIntro,
+                  ),
+                  const SizedBox(height: 10),
+                  _MenuButton(
+                    label: '2進数→10進数',
+                    description: '2進数を10進数へ',
+                    onTap: onOpenBinaryToDecimalIntro,
+                  ),
+                  const SizedBox(height: 10),
+                  _MenuButton(
+                    label: '10進数→2進数',
+                    description: '10進数を2進数へ',
+                    onTap: onOpenDecimalToBinaryIntro,
+                  ),
+                  const SizedBox(height: 10),
+                  _MenuButton(
+                    label: '2進数/10進数ミックス',
+                    description: 'ランダム出題',
+                    onTap: onOpenBinaryMixedIntro,
                   ),
                 ],
               ),
@@ -83,7 +107,7 @@ class MenuPresentation extends StatelessWidget {
                     description: '最新情報はこちら',
                     onTap: () => _launchUri(
                       context,
-                      Uri.parse('https://hitasura-math.qboad.com/'),
+                      Uri.parse('https://hitasura-info.qboad.com/'),
                     ),
                   ),
                   const SizedBox(height: 10),

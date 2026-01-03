@@ -10,7 +10,7 @@ void main() {
     var retried = false;
     var wentHome = false;
     final result = PracticeResult(
-      category: Category.factorization,
+      category: Category.pseudocodeExecution,
       mode: PracticeMode.infinite,
       difficulty: Difficulty.easy,
       answeredCount: 10,

@@ -31,9 +31,9 @@ void main() {
     await tester.pump();
     expect(openedMenu, isTrue);
 
-    await tester.tap(find.text('因数分解'));
+    await tester.tap(find.text('疑似コードの実行結果'));
     await tester.pump();
-    expect(selected, Category.factorization);
+    expect(selected, Category.pseudocodeExecution);
 
     final statsFinder = find.text('Stats');
     await tester.drag(find.byType(ListView), const Offset(0, -600));

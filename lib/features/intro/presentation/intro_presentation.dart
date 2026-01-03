@@ -1,87 +1,30 @@
 import 'package:flutter/material.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
+const _cMain = Color(0xFF0284C7);
 const _cGrayText = Color(0xFF64748B);
 
-class FactorIntroPresentation extends StatelessWidget {
-  const FactorIntroPresentation({super.key});
+class InfoIntroPresentation extends StatelessWidget {
+  const InfoIntroPresentation({
+    super.key,
+    required this.title,
+    required this.sections,
+  });
+
+  final String title;
+  final List<IntroSection> sections;
 
   @override
   Widget build(BuildContext context) {
-    return _IntroScaffold(
-      title: '因数分解の遊び方',
-      sections: const [
-        _Section(
-          title: '因数分解とは',
-          body:
-              '式を「かけ算の形」に分けることです。たとえば、x^2 + 5x + 6 は (x + 2)(x + 3) に分けられます。',
-        ),
-        _Section(
-          title: 'ゲームの流れ',
-          body:
-              '画面に式が表示されます。答えの欄をタップして入力し、数字パッドで値を入れます。正解したらすぐ次の問題へ進みます。',
-        ),
-        _Section(
-          title: '因数分解の遊び方',
-          body:
-              '空欄をタップして入力先を選び、数字を入れます。符号は「+/-」で切り替えます。答えが完成したら「回答する」。',
-        ),
-        _Section(
-          title: '入力のコツ',
-          body:
-              '迷ったら「クリア」でリセットできます。テンポよく入力すると気持ちよく進みます。',
-        ),
-        _Section(
-          title: '気楽にどうぞ',
-          body:
-              '正解数やタイムは自分のペースで。気持ちよくテンポ良く進めることを優先しています。',
-        ),
-      ],
+    return IntroScaffold(
+      title: title,
+      sections: sections,
     );
   }
 }
 
-class PrimeIntroPresentation extends StatelessWidget {
-  const PrimeIntroPresentation({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return _IntroScaffold(
-      title: '素因数分解の遊び方',
-      sections: const [
-        _Section(
-          title: '素因数分解とは',
-          body:
-              '数を素数のかけ算に分けることです。たとえば、84 は 2×2×3×7 の形に分けられます。',
-        ),
-        _Section(
-          title: 'ゲームの流れ',
-          body:
-              '画面に数が表示されます。素数の下にある指数の欄をタップして入力します。',
-        ),
-        _Section(
-          title: '素因数分解の遊び方',
-          body:
-              '指数を入れ終えたら「回答する」。迷ったら「クリア」でやり直せます。',
-        ),
-        _Section(
-          title: '入力のコツ',
-          body:
-              '入力先はタップで切り替えます。間違えそうなときは小さく確認しながら進めましょう。',
-        ),
-        _Section(
-          title: '気楽にどうぞ',
-          body:
-              '正解数やタイムは自分のペースで。気持ちよくテンポ良く進めることを優先しています。',
-        ),
-      ],
-    );
-  }
-}
-
-class _Section extends StatelessWidget {
-  const _Section({required this.title, required this.body});
+class IntroSection extends StatelessWidget {
+  const IntroSection({super.key, required this.title, required this.body});
 
   final String title;
   final String body;
@@ -119,14 +62,15 @@ class _Section extends StatelessWidget {
   }
 }
 
-class _IntroScaffold extends StatelessWidget {
-  const _IntroScaffold({
+class IntroScaffold extends StatelessWidget {
+  const IntroScaffold({
+    super.key,
     required this.title,
     required this.sections,
   });
 
   final String title;
-  final List<_Section> sections;
+  final List<IntroSection> sections;
 
   @override
   Widget build(BuildContext context) {

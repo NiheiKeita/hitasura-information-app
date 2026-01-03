@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:flutter_example_app/core/clock/clock.dart';
 import 'package:flutter_example_app/core/ads/noop_ad_service.dart';
+import 'package:flutter_example_app/core/clock/clock.dart';
 import 'package:flutter_example_app/core/storage/stats_repository.dart';
-import 'package:flutter_example_app/widgets/pressable_surface.dart';
 import 'package:flutter_example_app/features/practice/container/practice_container.dart';
 import 'package:flutter_example_app/features/practice/domain/enums.dart';
 import 'package:flutter_example_app/features/practice/domain/generators/problem_generator.dart';
 import 'package:flutter_example_app/features/practice/domain/problem.dart';
 import 'package:flutter_example_app/features/practice/presentation/widgets/answer_keypad.dart';
+import 'package:flutter_example_app/widgets/pressable_surface.dart';
 
 class FakeClock implements Clock {
   FakeClock(this._now);
@@ -87,80 +87,39 @@ class FakeStatsRepository implements StatsRepository {
   }
 }
 
-class FakeFactorizationGenerator implements FactorizationGenerator {
-  FakeFactorizationGenerator(this.problem);
-  final FactorizationProblem problem;
+class FakeInfoProblemGenerator implements InfoProblemGenerator {
+  FakeInfoProblemGenerator(this.problem);
+  final InfoProblem problem;
 
   @override
-  FactorizationProblem generate(Difficulty difficulty) => problem;
-}
-
-class FakePrimeGenerator implements PrimeFactorizationGenerator {
-  @override
-  PrimeFactorizationProblem generate(Difficulty difficulty) {
-    return PrimeFactorizationProblem(n: 2, primes: [2], difficulty: difficulty);
+  InfoProblem generate({
+    required Category category,
+    required Difficulty difficulty,
+  }) {
+    return problem;
   }
 }
 
 void main() {
-  testWidgets('PracticeContainer starts with a=1 in normal mode',
-      (tester) async {
+  testWidgets('Input enables submit and records answer', (tester) async {
     final statsRepository = FakeStatsRepository();
-    final generator = FakeFactorizationGenerator(
-      FactorizationProblem(
-        a: 1,
-        b: 2,
-        c: 1,
-        d: 3,
-        difficulty: Difficulty.normal,
+    final generator = FakeInfoProblemGenerator(
+      const InfoProblem(
+        category: Category.pseudocodeExecution,
+        difficulty: Difficulty.easy,
+        question: 'x <- 1',
+        answer: '12',
+        answerFormat: AnswerFormat.decimal,
       ),
     );
 
     await tester.pumpWidget(
       MaterialApp(
         home: PracticeContainer(
-          category: Category.factorization,
+          category: Category.pseudocodeExecution,
           mode: PracticeMode.infinite,
-          difficulty: Difficulty.normal,
-          factorizationGenerator: generator,
-          primeFactorizationGenerator: FakePrimeGenerator(),
-          statsRepository: statsRepository,
-          clock: FakeClock(DateTime(2024, 1, 1)),
-          adService: NoopAdService(),
-          onFinish: (_) {},
-          onExit: () {},
-        ),
-      ),
-    );
-    await tester.pump(const Duration(milliseconds: 2200));
-
-    final firstField = find.byKey(const ValueKey('field_a'));
-    expect(
-      find.descendant(of: firstField, matching: find.text('1')),
-      findsOneWidget,
-    );
-  });
-
-  testWidgets('Input updates values and enables submit', (tester) async {
-    final statsRepository = FakeStatsRepository();
-    final generator = FakeFactorizationGenerator(
-      FactorizationProblem(
-        a: 1,
-        b: 2,
-        c: 1,
-        d: 3,
-        difficulty: Difficulty.normal,
-      ),
-    );
-
-    await tester.pumpWidget(
-      MaterialApp(
-        home: PracticeContainer(
-          category: Category.factorization,
-          mode: PracticeMode.infinite,
-          difficulty: Difficulty.normal,
-          factorizationGenerator: generator,
-          primeFactorizationGenerator: FakePrimeGenerator(),
+          difficulty: Difficulty.easy,
+          infoProblemGenerator: generator,
           statsRepository: statsRepository,
           clock: FakeClock(DateTime(2024, 1, 1)),
           adService: NoopAdService(),
@@ -176,28 +135,11 @@ void main() {
     expect(button.enabled, isFalse);
 
     final keypadFinder = find.byType(AnswerKeypad);
-    final fieldB = find.byKey(const ValueKey('field_b'));
-    final fieldC = find.byKey(const ValueKey('field_c'));
-    final fieldD = find.byKey(const ValueKey('field_d'));
-
-    await tester.ensureVisible(fieldB);
-    await tester.tap(fieldB);
-    await tester.tap(
-      find.descendant(of: keypadFinder, matching: find.text('2')),
-    );
-    await tester.pump();
-
-    await tester.ensureVisible(fieldC);
-    await tester.tap(fieldC);
     await tester.tap(
       find.descendant(of: keypadFinder, matching: find.text('1')),
     );
-    await tester.pump();
-
-    await tester.ensureVisible(fieldD);
-    await tester.tap(fieldD);
     await tester.tap(
-      find.descendant(of: keypadFinder, matching: find.text('3')),
+      find.descendant(of: keypadFinder, matching: find.text('2')),
     );
     await tester.pump();
 
@@ -214,13 +156,13 @@ void main() {
 
   testWidgets('Time attack finishes after 10 submissions', (tester) async {
     final statsRepository = FakeStatsRepository();
-    final generator = FakeFactorizationGenerator(
-      FactorizationProblem(
-        a: 1,
-        b: 2,
-        c: 1,
-        d: 3,
+    final generator = FakeInfoProblemGenerator(
+      const InfoProblem(
+        category: Category.controlFlowTrace,
         difficulty: Difficulty.easy,
+        question: 'x <- 1',
+        answer: '1',
+        answerFormat: AnswerFormat.decimal,
       ),
     );
     var finished = false;
@@ -228,11 +170,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: PracticeContainer(
-          category: Category.factorization,
+          category: Category.controlFlowTrace,
           mode: PracticeMode.timeAttack10,
           difficulty: Difficulty.easy,
-          factorizationGenerator: generator,
-          primeFactorizationGenerator: FakePrimeGenerator(),
+          infoProblemGenerator: generator,
           statsRepository: statsRepository,
           clock: FakeClock(DateTime(2024, 1, 1)),
           adService: NoopAdService(),
@@ -246,20 +187,9 @@ void main() {
     await tester.pump(const Duration(milliseconds: 2200));
 
     final keypadFinder = find.byType(AnswerKeypad);
-    final fieldB = find.byKey(const ValueKey('field_b'));
-    final fieldD = find.byKey(const ValueKey('field_d'));
-
     for (var i = 0; i < 10; i++) {
-      await tester.ensureVisible(fieldB);
-      await tester.tap(fieldB);
       await tester.tap(
-        find.descendant(of: keypadFinder, matching: find.text('2')),
-      );
-      await tester.pump();
-      await tester.ensureVisible(fieldD);
-      await tester.tap(fieldD);
-      await tester.tap(
-        find.descendant(of: keypadFinder, matching: find.text('3')),
+        find.descendant(of: keypadFinder, matching: find.text('1')),
       );
       await tester.pump();
       await tester.tap(
@@ -275,13 +205,13 @@ void main() {
   testWidgets('Manual finish in time attack skips best record',
       (tester) async {
     final statsRepository = FakeStatsRepository();
-    final generator = FakeFactorizationGenerator(
-      FactorizationProblem(
-        a: 1,
-        b: 2,
-        c: 1,
-        d: 3,
+    final generator = FakeInfoProblemGenerator(
+      const InfoProblem(
+        category: Category.decimalToBinary,
         difficulty: Difficulty.easy,
+        question: 'x <- 1',
+        answer: '1',
+        answerFormat: AnswerFormat.decimal,
       ),
     );
     var finished = false;
@@ -289,11 +219,10 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: PracticeContainer(
-          category: Category.factorization,
+          category: Category.decimalToBinary,
           mode: PracticeMode.timeAttack10,
           difficulty: Difficulty.easy,
-          factorizationGenerator: generator,
-          primeFactorizationGenerator: FakePrimeGenerator(),
+          infoProblemGenerator: generator,
           statsRepository: statsRepository,
           clock: FakeClock(DateTime(2024, 1, 1)),
           adService: NoopAdService(),

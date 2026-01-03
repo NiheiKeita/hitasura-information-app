@@ -13,13 +13,13 @@ void main() {
     final date = DateTime(2024, 1, 2);
     await repo.recordAnswer(
       date: date,
-      category: Category.factorization,
+      category: Category.pseudocodeExecution,
       mode: PracticeMode.infinite,
       correct: true,
     );
     await repo.recordAnswer(
       date: date,
-      category: Category.primeFactorization,
+      category: Category.binaryToDecimal,
       mode: PracticeMode.timeAttack10,
       correct: false,
     );
@@ -33,8 +33,8 @@ void main() {
     final daily = await repo.loadDailyStats(date: date);
     expect(daily?.answered, 2);
     expect(daily?.correct, 1);
-    expect(daily?.categoryCounts[Category.factorization], 1);
-    expect(daily?.categoryCounts[Category.primeFactorization], 1);
+    expect(daily?.categoryCounts[Category.pseudocodeExecution], 1);
+    expect(daily?.categoryCounts[Category.binaryToDecimal], 1);
     expect(daily?.modeCounts[PracticeMode.infinite], 1);
     expect(daily?.modeCounts[PracticeMode.timeAttack10], 1);
   });
@@ -46,13 +46,13 @@ void main() {
 
     await repo.recordAnswer(
       date: DateTime(2024, 2, 2),
-      category: Category.factorization,
+      category: Category.decimalToBinary,
       mode: PracticeMode.infinite,
       correct: true,
     );
     await repo.recordAnswer(
       date: DateTime(2024, 2, 5),
-      category: Category.primeFactorization,
+      category: Category.controlFlowTrace,
       mode: PracticeMode.timeAttack10,
       correct: true,
     );
@@ -71,7 +71,7 @@ void main() {
     final repo = StatsRepositoryPrefs(prefs: prefs);
 
     await repo.recordBest(
-      category: Category.factorization,
+      category: Category.pseudocodeExecution,
       mode: PracticeMode.timeAttack10,
       difficulty: Difficulty.easy,
       correctCount: 0,
@@ -79,7 +79,7 @@ void main() {
       timeMillis: 30000,
     );
     await repo.recordBest(
-      category: Category.factorization,
+      category: Category.pseudocodeExecution,
       mode: PracticeMode.timeAttack10,
       difficulty: Difficulty.easy,
       correctCount: 0,
@@ -88,14 +88,14 @@ void main() {
     );
 
     final timeBest = await repo.loadBest(
-      category: Category.factorization,
+      category: Category.pseudocodeExecution,
       mode: PracticeMode.timeAttack10,
       difficulty: Difficulty.easy,
     );
     expect(timeBest?.bestTimeMillis, 25000);
 
     await repo.recordBest(
-      category: Category.primeFactorization,
+      category: Category.controlFlowTrace,
       mode: PracticeMode.infinite,
       difficulty: Difficulty.normal,
       correctCount: 10,
@@ -103,7 +103,7 @@ void main() {
       timeMillis: null,
     );
     await repo.recordBest(
-      category: Category.primeFactorization,
+      category: Category.controlFlowTrace,
       mode: PracticeMode.infinite,
       difficulty: Difficulty.normal,
       correctCount: 12,
@@ -112,7 +112,7 @@ void main() {
     );
 
     final infiniteBest = await repo.loadBest(
-      category: Category.primeFactorization,
+      category: Category.controlFlowTrace,
       mode: PracticeMode.infinite,
       difficulty: Difficulty.normal,
     );

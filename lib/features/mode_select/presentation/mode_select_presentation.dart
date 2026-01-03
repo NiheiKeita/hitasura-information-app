@@ -4,8 +4,8 @@ import '../../practice/domain/enums.dart';
 import '../../../widgets/pressable_surface.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
-const _cAccent = Color(0xFF2DD4BF);
+const _cMain = Color(0xFF0284C7);
+const _cAccent = Color(0xFF38BDF8);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
@@ -183,10 +183,16 @@ class ModeSelectPresentation extends StatelessWidget {
 
   String _categoryLabel(Category category) {
     switch (category) {
-      case Category.factorization:
-        return '因数分解';
-      case Category.primeFactorization:
-        return '素因数分解';
+      case Category.pseudocodeExecution:
+        return '疑似コードの実行結果';
+      case Category.controlFlowTrace:
+        return 'if / for / while の処理追跡';
+      case Category.binaryToDecimal:
+        return '2進数→10進数';
+      case Category.decimalToBinary:
+        return '10進数→2進数';
+      case Category.binaryMixed:
+        return '2進数/10進数ミックス';
     }
   }
 }

@@ -6,15 +6,21 @@ import 'package:flutter_example_app/widgets/bubbly_background.dart';
 
 void main() {
   testWidgets('MenuPresentation triggers intro callbacks', (tester) async {
-    var openedFactor = false;
-    var openedPrime = false;
+    var openedPseudocode = false;
+    var openedControl = false;
+    var openedBinaryToDecimal = false;
+    var openedDecimalToBinary = false;
+    var openedBinaryMixed = false;
     var openedLicenses = false;
 
     await tester.pumpWidget(
       MaterialApp(
         home: MenuPresentation(
-          onOpenFactorIntro: () => openedFactor = true,
-          onOpenPrimeIntro: () => openedPrime = true,
+          onOpenPseudocodeIntro: () => openedPseudocode = true,
+          onOpenControlFlowIntro: () => openedControl = true,
+          onOpenBinaryToDecimalIntro: () => openedBinaryToDecimal = true,
+          onOpenDecimalToBinaryIntro: () => openedDecimalToBinary = true,
+          onOpenBinaryMixedIntro: () => openedBinaryMixed = true,
           onOpenLicenses: () => openedLicenses = true,
         ),
       ),
@@ -22,14 +28,31 @@ void main() {
 
     expect(find.byType(BubblyBackground), findsOneWidget);
 
-    await tester.tap(find.text('因数分解の遊び方'));
+    await tester.tap(find.text('疑似コードの実行結果'));
     await tester.pump();
-    expect(openedFactor, isTrue);
+    expect(openedPseudocode, isTrue);
 
-    await tester.tap(find.text('素因数分解の遊び方'));
+    await tester.tap(find.text('if / for / while の処理追跡'));
     await tester.pump();
-    expect(openedPrime, isTrue);
+    expect(openedControl, isTrue);
 
+    await tester.tap(find.text('2進数→10進数'));
+    await tester.pump();
+    expect(openedBinaryToDecimal, isTrue);
+
+    await tester.tap(find.text('10進数→2進数'));
+    await tester.pump();
+    expect(openedDecimalToBinary, isTrue);
+
+    await tester.tap(find.text('2進数/10進数ミックス'));
+    await tester.pump();
+    expect(openedBinaryMixed, isTrue);
+
+    await tester.scrollUntilVisible(
+      find.text('ライセンス'),
+      300,
+      scrollable: find.byType(Scrollable),
+    );
     await tester.tap(find.text('ライセンス'));
     await tester.pump();
     expect(openedLicenses, isTrue);

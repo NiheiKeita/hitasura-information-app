@@ -16,7 +16,7 @@ void main() {
       totalsCorrect: 123,
       bestRecords: [
         BestRecordEntry(
-          category: Category.factorization,
+          category: Category.pseudocodeExecution,
           mode: PracticeMode.infinite,
           difficulty: Difficulty.easy,
           record: const BestRecord(bestCorrectCount: 12, bestMaxStreak: 7),

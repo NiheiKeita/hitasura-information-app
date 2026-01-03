@@ -110,28 +110,111 @@ class _TabsContainerState extends State<TabsContainer> {
                   },
                   onOpenStats: () => _setIndex(1),
                   onOpenRanking: () => _setIndex(2),
-                  onOpenMenu: () {
+                          onOpenMenu: () {
                     _homeNavigatorKey.currentState?.push(
                       MaterialPageRoute(
                         builder: (menuContext) => MenuPresentation(
-                          onOpenFactorIntro: () {
+                          onOpenPseudocodeIntro: () {
                             Navigator.of(menuContext).push(
                               MaterialPageRoute(
-                                builder: (_) => const FactorIntroPresentation(),
+                                builder: (_) => const InfoIntroPresentation(
+                                  title: '疑似コードの実行結果',
+                                  sections: [
+                                    IntroSection(
+                                      title: 'ポイント',
+                                      body: '変数の値がどう変わるかを順番に追います。',
+                                    ),
+                                    IntroSection(
+                                      title: '解き方',
+                                      body:
+                                          '疑似コードを上から実行し、最後の出力や値を入力します。',
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
-                          onOpenPrimeIntro: () {
+                          onOpenControlFlowIntro: () {
                             Navigator.of(menuContext).push(
                               MaterialPageRoute(
-                                builder: (_) => const PrimeIntroPresentation(),
+                                builder: (_) => const InfoIntroPresentation(
+                                  title: 'if / for / while の処理追跡',
+                                  sections: [
+                                    IntroSection(
+                                      title: 'ポイント',
+                                      body: '条件の真偽と繰り返し回数を整理します。',
+                                    ),
+                                    IntroSection(
+                                      title: '解き方',
+                                      body:
+                                          '分岐の結果やループ回数、最終出力を数字で答えます。',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          onOpenBinaryToDecimalIntro: () {
+                            Navigator.of(menuContext).push(
+                              MaterialPageRoute(
+                                builder: (_) => const InfoIntroPresentation(
+                                  title: '2進数→10進数',
+                                  sections: [
+                                    IntroSection(
+                                      title: 'ポイント',
+                                      body: '各桁の重み(1,2,4,8...)を足し合わせます。',
+                                    ),
+                                    IntroSection(
+                                      title: '解き方',
+                                      body: '2進数を10進数で入力します。',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          onOpenDecimalToBinaryIntro: () {
+                            Navigator.of(menuContext).push(
+                              MaterialPageRoute(
+                                builder: (_) => const InfoIntroPresentation(
+                                  title: '10進数→2進数',
+                                  sections: [
+                                    IntroSection(
+                                      title: 'ポイント',
+                                      body: '2で割った余りを逆順に並べます。',
+                                    ),
+                                    IntroSection(
+                                      title: '解き方',
+                                      body: '10進数を2進数で入力します。',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                          onOpenBinaryMixedIntro: () {
+                            Navigator.of(menuContext).push(
+                              MaterialPageRoute(
+                                builder: (_) => const InfoIntroPresentation(
+                                  title: '2進数/10進数ミックス',
+                                  sections: [
+                                    IntroSection(
+                                      title: 'ポイント',
+                                      body: '変換方向を問題文で確認します。',
+                                    ),
+                                    IntroSection(
+                                      title: '解き方',
+                                      body: '指定された形式で答えを入力します。',
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },
                           onOpenLicenses: () {
                             showLicensePage(
                               context: menuContext,
-                              applicationName: 'ひたすら数学',
+                              applicationName: 'ひたすら情報',
                             );
                           },
                         ),
