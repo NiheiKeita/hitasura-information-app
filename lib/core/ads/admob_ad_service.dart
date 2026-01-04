@@ -28,7 +28,10 @@ class AdMobAdService implements AdService {
     }
     await MobileAds.instance.updateRequestConfiguration(
       RequestConfiguration(
-        testDeviceIds: const ['0110c468cca81d0dd5af2e70bea43369'],
+        testDeviceIds: const [
+          '0110c468cca81d0dd5af2e70bea43369',
+          'e4030c9ba31d3567bca3f762c66ec016',
+        ],
       ),
     );
     await MobileAds.instance.initialize();
