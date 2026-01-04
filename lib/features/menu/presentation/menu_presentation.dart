@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../widgets/bubbly_background.dart';
 import '../../../widgets/pressable_surface.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -43,7 +43,7 @@ class MenuPresentation extends StatelessWidget {
       body: Stack(
         children: [
           const Positioned.fill(
-            child: BubblyBackground(),
+            child: WavyBackground(),
           ),
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),

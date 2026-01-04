@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../widgets/wavy_background.dart';
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
 const _cGrayText = Color(0xFF64748B);
@@ -88,11 +89,18 @@ class IntroScaffold extends StatelessWidget {
         elevation: 0,
         surfaceTintColor: _cBg,
       ),
-      body: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        itemCount: sections.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 16),
-        itemBuilder: (_, index) => sections[index],
+      body: Stack(
+        children: [
+          const Positioned.fill(
+            child: WavyBackground(),
+          ),
+          ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            itemCount: sections.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 16),
+            itemBuilder: (_, index) => sections[index],
+          ),
+        ],
       ),
     );
   }

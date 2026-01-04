@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/features/menu/presentation/menu_presentation.dart';
-import 'package:flutter_example_app/widgets/bubbly_background.dart';
+import 'package:flutter_example_app/widgets/wavy_background.dart';
 
 void main() {
   testWidgets('MenuPresentation triggers intro callbacks', (tester) async {
@@ -26,7 +26,7 @@ void main() {
       ),
     );
 
-    expect(find.byType(BubblyBackground), findsOneWidget);
+    expect(find.byType(WavyBackground), findsOneWidget);
 
     await tester.tap(find.text('疑似コードの実行結果'));
     await tester.pump();

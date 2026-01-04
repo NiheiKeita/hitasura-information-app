@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../core/storage/stats_repository.dart';
 import '../../practice/domain/enums.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -55,6 +56,9 @@ class CalendarPresentation extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          const Positioned.fill(
+            child: WavyBackground(),
           ),
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),

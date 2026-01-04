@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../practice/domain/enums.dart';
 import '../../practice/domain/problem.dart';
 import '../../../widgets/pressable_surface.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -44,6 +45,9 @@ class ResultPresentation extends StatelessWidget {
       ),
       body: Stack(
         children: [
+          const Positioned.fill(
+            child: WavyBackground(),
+          ),
           ListView(
             padding: EdgeInsets.fromLTRB(
               24,

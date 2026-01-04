@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../widgets/bubbly_background.dart';
 import '../../../widgets/pressable_surface.dart';
+import '../../../widgets/wavy_background.dart';
 import '../../practice/domain/enums.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
-const _cAccent = Color(0xFF38BDF8);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
@@ -68,7 +67,9 @@ class HomePresentation extends StatelessWidget {
               ),
             ),
           ),
-          const Positioned.fill(child: BubblyBackground()),
+          const Positioned.fill(
+            child: WavyBackground(),
+          ),
           Positioned(
             top: -40,
             right: -30,
@@ -116,7 +117,7 @@ class HomePresentation extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'ひたすら解く。ただそれだけ。',
+                            '考えずに、慣れろ。',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
@@ -150,36 +151,41 @@ class HomePresentation extends StatelessWidget {
               _CategoryCard(
                 title: '疑似コードの実行結果',
                 description: '変数の最終値・出力を追う',
-                imagePath: 'assets/images/category/pseudocode.png',
+                imagePath: 'assets/images/code.png',
                 onTap: () => onSelectCategory(Category.pseudocodeExecution),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
                 title: 'if / for / while の処理追跡',
                 description: '分岐とループを読み解く',
-                imagePath: 'assets/images/category/control_flow.png',
+                imagePath: 'assets/images/loop.png',
                 onTap: () => onSelectCategory(Category.controlFlowTrace),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
                 title: '2進数→10進数',
                 description: '2進数を10進数に変換',
-                imagePath: 'assets/images/category/binary_bits.png',
+                imagePath: 'assets/images/2_to_10.png',
                 onTap: () => onSelectCategory(Category.binaryToDecimal),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
                 title: '10進数→2進数',
                 description: '10進数を2進数に変換',
-                imagePath: 'assets/images/category/binary_bits.png',
+                imagePath: 'assets/images/10_to_2.png',
                 onTap: () => onSelectCategory(Category.decimalToBinary),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
                 title: '2進数/10進数ミックス',
                 description: '変換がランダムに出題',
-                imagePath: 'assets/images/category/binary_bits.png',
+                imagePath: 'assets/images/2_and_10.png',
                 onTap: () => onSelectCategory(Category.binaryMixed),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 32),
               Row(
@@ -214,12 +220,14 @@ class _CategoryCard extends StatelessWidget {
     required this.title,
     required this.description,
     this.imagePath,
+    this.backgroundImagePath,
     required this.onTap,
   });
 
   final String title;
   final String description;
   final String? imagePath;
+  final String? backgroundImagePath;
   final VoidCallback onTap;
 
   @override
@@ -232,6 +240,12 @@ class _CategoryCard extends StatelessWidget {
         color: _cBg,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: _cGrayBorder),
+        image: backgroundImagePath != null
+            ? DecorationImage(
+                image: AssetImage(backgroundImagePath!),
+                fit: BoxFit.cover,
+              )
+            : null,
         boxShadow: [
           BoxShadow(
             color: const Color(0x14000000),

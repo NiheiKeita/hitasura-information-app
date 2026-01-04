@@ -5,6 +5,7 @@ import '../domain/answer_input.dart';
 import '../domain/enums.dart';
 import 'widgets/answer_fields.dart';
 import 'widgets/answer_keypad.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -122,6 +123,9 @@ class _PracticePresentationState extends State<PracticePresentation>
       ),
       body: Stack(
         children: [
+          const Positioned.fill(
+            child: WavyBackground(),
+          ),
           Column(
             children: [
               Padding(

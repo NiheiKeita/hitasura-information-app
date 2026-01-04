@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/features/home/presentation/home_presentation.dart';
 import 'package:flutter_example_app/features/practice/domain/enums.dart';
-import 'package:flutter_example_app/widgets/bubbly_background.dart';
+import 'package:flutter_example_app/widgets/wavy_background.dart';
 
 void main() {
   testWidgets('HomePresentation triggers menu and category callbacks',
@@ -25,7 +25,7 @@ void main() {
       ),
     );
 
-    expect(find.byType(BubblyBackground), findsOneWidget);
+    expect(find.byType(WavyBackground), findsOneWidget);
 
     await tester.tap(find.byIcon(Icons.menu));
     await tester.pump();

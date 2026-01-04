@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../core/storage/stats_repository.dart';
 import '../../practice/domain/enums.dart';
-import '../../../widgets/bubbly_background.dart';
 import '../../../widgets/pressable_surface.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -60,7 +60,7 @@ class StatsPresentation extends StatelessWidget {
             ),
           ),
           const Positioned.fill(
-            child: BubblyBackground(),
+            child: WavyBackground(),
           ),
           Positioned(
             top: -30,

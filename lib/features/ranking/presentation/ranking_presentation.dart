@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../widgets/bubbly_background.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -47,7 +47,7 @@ class RankingPresentation extends StatelessWidget {
             ),
           ),
           const Positioned.fill(
-            child: BubblyBackground(),
+            child: WavyBackground(),
           ),
           Positioned(
             top: -30,
