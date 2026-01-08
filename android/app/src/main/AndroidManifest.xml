@@ -1,11 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="ひたすら数学"
+        android:label="ひたすら情報"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-5047266594533407~3253919454"/>
+            android:value="ca-app-pub-5047266594533407~8422802883"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

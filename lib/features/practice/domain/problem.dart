@@ -1,41 +1,40 @@
 import 'enums.dart';
-import 'scoring.dart';
 
-class FactorizationProblem {
-  FactorizationProblem({
-    required this.a,
-    required this.b,
-    required this.c,
-    required this.d,
-    required this.difficulty,
-  })  : A = expandFactors(a, b, c, d).A,
-        B = expandFactors(a, b, c, d).B,
-        C = expandFactors(a, b, c, d).C;
-
-  final int a;
-  final int b;
-  final int c;
-  final int d;
-  final int A;
-  final int B;
-  final int C;
-  final Difficulty difficulty;
-
-  String get questionText => formatQuadratic(A, B, C);
+enum AnswerFormat {
+  decimal,
+  binary,
 }
 
-class PrimeFactorizationProblem {
-  PrimeFactorizationProblem({
-    required this.n,
-    required this.primes,
+class InfoProblem {
+  const InfoProblem({
+    required this.category,
     required this.difficulty,
+    required this.question,
+    required this.answer,
+    required this.answerFormat,
+    this.answerHint,
   });
 
-  final int n;
-  final List<int> primes;
+  final Category category;
   final Difficulty difficulty;
+  final String question;
+  final String answer;
+  final AnswerFormat answerFormat;
+  final String? answerHint;
 
-  String get questionText => n.toString();
+  String get questionText => question;
+
+  String get hintText {
+    if (answerHint != null && answerHint!.isNotEmpty) {
+      return answerHint!;
+    }
+    switch (answerFormat) {
+      case AnswerFormat.decimal:
+        return '10進数で答える';
+      case AnswerFormat.binary:
+        return '2進数で答える';
+    }
+  }
 }
 
 class PracticeResult {

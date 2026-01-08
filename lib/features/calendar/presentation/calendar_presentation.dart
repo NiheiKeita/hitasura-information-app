@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../core/storage/stats_repository.dart';
 import '../../practice/domain/enums.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
-const _cAccent = Color(0xFF2DD4BF);
+const _cMain = Color(0xFF0284C7);
+const _cAccent = Color(0xFF38BDF8);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
@@ -55,6 +56,9 @@ class CalendarPresentation extends StatelessWidget {
                 ),
               ),
             ),
+          ),
+          const Positioned.fill(
+            child: WavyBackground(),
           ),
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -168,13 +172,26 @@ class CalendarDayDetailSheet extends StatelessWidget {
               ),
               const SizedBox(height: 6),
               _SummaryRow(
-                label: '因数分解',
-                value: '${data.categoryCounts[Category.factorization] ?? 0}問',
+                label: '疑似コードの実行結果',
+                value:
+                    '${data.categoryCounts[Category.pseudocodeExecution] ?? 0}問',
               ),
               _SummaryRow(
-                label: '素因数分解',
+                label: 'if / for / while の処理追跡',
                 value:
-                    '${data.categoryCounts[Category.primeFactorization] ?? 0}問',
+                    '${data.categoryCounts[Category.controlFlowTrace] ?? 0}問',
+              ),
+              _SummaryRow(
+                label: '2進数→10進数',
+                value: '${data.categoryCounts[Category.binaryToDecimal] ?? 0}問',
+              ),
+              _SummaryRow(
+                label: '10進数→2進数',
+                value: '${data.categoryCounts[Category.decimalToBinary] ?? 0}問',
+              ),
+              _SummaryRow(
+                label: '2進数/10進数ミックス',
+                value: '${data.categoryCounts[Category.binaryMixed] ?? 0}問',
               ),
               const SizedBox(height: 12),
               const Text(

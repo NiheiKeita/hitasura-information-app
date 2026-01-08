@@ -7,24 +7,21 @@ import 'core/ads/admob_ad_service.dart';
 import 'core/ads/noop_ad_service.dart';
 import 'core/clock/clock.dart';
 import 'core/storage/stats_repository_prefs.dart';
-import 'features/practice/domain/generators/factorization_generator.dart';
-import 'features/practice/domain/generators/prime_factorization_generator.dart';
 import 'features/practice/domain/generators/problem_generator.dart';
+import 'features/practice/domain/generators/info_problem_generator.dart';
 import 'router.dart';
 
 class App extends StatelessWidget {
   const App({
     super.key,
     required this.statsRepository,
-    required this.factorizationGenerator,
-    required this.primeFactorizationGenerator,
+    required this.infoProblemGenerator,
     required this.clock,
     required this.adService,
   });
 
   final StatsRepositoryPrefs statsRepository;
-  final FactorizationGenerator factorizationGenerator;
-  final PrimeFactorizationGenerator primeFactorizationGenerator;
+  final InfoProblemGenerator infoProblemGenerator;
   final Clock clock;
   final AdService adService;
 
@@ -32,32 +29,32 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = createRouter(
       statsRepository: statsRepository,
-      factorizationGenerator: factorizationGenerator,
-      primeFactorizationGenerator: primeFactorizationGenerator,
+      infoProblemGenerator: infoProblemGenerator,
       clock: clock,
       adService: adService,
     );
 
     return MaterialApp.router(
-      title: 'Hitasura Suugaku',
+      title: 'Hitasura Jouhou',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF0B1E4B),
-          primary: const Color(0xFF0B1E4B),
-          secondary: const Color(0xFF2F5AA8),
+          seedColor: const Color(0xFF0EA5E9),
+          primary: const Color(0xFF0EA5E9),
+          secondary: const Color(0xFF38BDF8),
           surface: Colors.white,
+          error: const Color(0xFFEF4444),
         ),
-        scaffoldBackgroundColor: Colors.white,
+        scaffoldBackgroundColor: const Color(0xFFF8FAFC),
         useMaterial3: true,
         textTheme: ThemeData.light()
             .textTheme
             .apply(
-              bodyColor: const Color(0xFF1F2A44),
-              displayColor: const Color(0xFF1F2A44),
+              bodyColor: const Color(0xFF0F172A),
+              displayColor: const Color(0xFF0F172A),
             ),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          foregroundColor: Color(0xFF0B1E4B),
+          foregroundColor: Color(0xFF0284C7),
           elevation: 0,
         ),
         cardTheme: CardThemeData(
@@ -83,7 +80,7 @@ class App extends StatelessWidget {
         ),
         bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           backgroundColor: Colors.white,
-          selectedItemColor: Color(0xFF0B1E4B),
+          selectedItemColor: Color(0xFF0EA5E9),
           unselectedItemColor: Color(0xFF8D98B3),
         ),
       ),
@@ -98,8 +95,7 @@ class App extends StatelessWidget {
     await adService.init();
     return App(
       statsRepository: StatsRepositoryPrefs(prefs: prefs),
-      factorizationGenerator: RandomFactorizationGenerator(),
-      primeFactorizationGenerator: RandomPrimeFactorizationGenerator(),
+      infoProblemGenerator: FixedInfoProblemGenerator(),
       clock: SystemClock(),
       adService: adService,
     );

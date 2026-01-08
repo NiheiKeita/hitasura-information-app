@@ -14,8 +14,7 @@ import 'features/tabs/tabs_container.dart';
 
 GoRouter createRouter({
   required StatsRepository statsRepository,
-  required FactorizationGenerator factorizationGenerator,
-  required PrimeFactorizationGenerator primeFactorizationGenerator,
+  required InfoProblemGenerator infoProblemGenerator,
   required Clock clock,
   required AdService adService,
 }) {
@@ -59,8 +58,7 @@ GoRouter createRouter({
             category: args.category,
             mode: args.mode,
             difficulty: args.difficulty,
-            factorizationGenerator: factorizationGenerator,
-            primeFactorizationGenerator: primeFactorizationGenerator,
+            infoProblemGenerator: infoProblemGenerator,
             statsRepository: statsRepository,
             clock: clock,
             adService: adService,

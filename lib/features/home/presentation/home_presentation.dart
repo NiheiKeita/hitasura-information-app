@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../../../widgets/bubbly_background.dart';
 import '../../../widgets/pressable_surface.dart';
+import '../../../widgets/wavy_background.dart';
 import '../../practice/domain/enums.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
-const _cAccent = Color(0xFF2DD4BF);
+const _cMain = Color(0xFF0284C7);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
@@ -32,10 +31,13 @@ class HomePresentation extends StatelessWidget {
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: Image.asset(
-          'assets/images/logo_full.png',
-          height: 36,
-          fit: BoxFit.contain,
+        title: const Text(
+          'ひたすら情報',
+          style: TextStyle(
+            color: _cMain,
+            fontWeight: FontWeight.w800,
+            fontSize: 20,
+          ),
         ),
         backgroundColor: _cBg,
         elevation: 0,
@@ -65,7 +67,9 @@ class HomePresentation extends StatelessWidget {
               ),
             ),
           ),
-          const Positioned.fill(child: BubblyBackground()),
+          const Positioned.fill(
+            child: WavyBackground(),
+          ),
           Positioned(
             top: -40,
             right: -30,
@@ -113,7 +117,7 @@ class HomePresentation extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'ひたすら解く。ただそれだけ。',
+                            '考えずに、慣れろ。',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
@@ -136,7 +140,7 @@ class HomePresentation extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               const Text(
-                'カテゴリをえらぶ',
+                '単元をえらぶ',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
@@ -145,35 +149,43 @@ class HomePresentation extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               _CategoryCard(
-                title: '因数分解',
-                description: '因数分解をする',
-                imagePath: 'assets/images/category/innsuubunnkai.png',
-                onTap: () => onSelectCategory(Category.factorization),
+                title: '疑似コードの実行結果',
+                description: '変数の最終値・出力を追う',
+                imagePath: 'assets/images/code.png',
+                onTap: () => onSelectCategory(Category.pseudocodeExecution),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
-                title: '素因数分解',
-                description: 'N を素因数のべきに分解',
-                imagePath: 'assets/images/category/soinnsuubunkai.png',
-                onTap: () => onSelectCategory(Category.primeFactorization),
+                title: 'if / for / while の処理追跡',
+                description: '分岐とループを読み解く',
+                imagePath: 'assets/images/loop.png',
+                onTap: () => onSelectCategory(Category.controlFlowTrace),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
-              const _ComingSoonCard(
-                title: '微分',
-                description: 'COMING SOON',
-                imagePath: 'assets/images/category/bibunn.png',
+              _CategoryCard(
+                title: '2進数→10進数',
+                description: '2進数を10進数に変換',
+                imagePath: 'assets/images/2_to_10.png',
+                onTap: () => onSelectCategory(Category.binaryToDecimal),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
-              const _ComingSoonCard(
-                title: '積分',
-                description: 'COMING SOON',
-                imagePath: 'assets/images/category/sekibun.png',
+              _CategoryCard(
+                title: '10進数→2進数',
+                description: '10進数を2進数に変換',
+                imagePath: 'assets/images/10_to_2.png',
+                onTap: () => onSelectCategory(Category.decimalToBinary),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
-              const _ComingSoonCard(
-                title: '定積分',
-                description: 'COMING SOON',
-                imagePath: 'assets/images/category/teisekibun.png',
+              _CategoryCard(
+                title: '2進数/10進数ミックス',
+                description: '変換がランダムに出題',
+                imagePath: 'assets/images/2_and_10.png',
+                onTap: () => onSelectCategory(Category.binaryMixed),
+                backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 32),
               Row(
@@ -208,12 +220,14 @@ class _CategoryCard extends StatelessWidget {
     required this.title,
     required this.description,
     this.imagePath,
+    this.backgroundImagePath,
     required this.onTap,
   });
 
   final String title;
   final String description;
   final String? imagePath;
+  final String? backgroundImagePath;
   final VoidCallback onTap;
 
   @override
@@ -226,6 +240,12 @@ class _CategoryCard extends StatelessWidget {
         color: _cBg,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: _cGrayBorder),
+        image: backgroundImagePath != null
+            ? DecorationImage(
+                image: AssetImage(backgroundImagePath!),
+                fit: BoxFit.cover,
+              )
+            : null,
         boxShadow: [
           BoxShadow(
             color: const Color(0x14000000),
@@ -237,12 +257,12 @@ class _CategoryCard extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20),
         child: SizedBox(
-          height: 60,
+          height: 92,
           child: Row(
             children: [
               Container(
-                width: 60,
-                height: 60,
+                width: 72,
+                height: 72,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(16),
                 ),
@@ -275,115 +295,9 @@ class _CategoryCard extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: _cAccent,
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'START',
-                      style: TextStyle(
-                        color: _cBg,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 12,
-                      ),
-                    ),
-                    SizedBox(width: 4),
-                    Icon(Icons.chevron_right, color: _cBg, size: 16),
-                  ],
-                ),
-              ),
+              const Icon(Icons.chevron_right, color: _cGrayText),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ComingSoonCard extends StatelessWidget {
-  const _ComingSoonCard({
-    required this.title,
-    required this.description,
-    this.imagePath,
-  });
-
-  final String title;
-  final String description;
-  final String? imagePath;
-
-  @override
-  Widget build(BuildContext context) {
-    return Opacity(
-      opacity: 0.6,
-      child: Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: _cBg,
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: _cGrayBorder),
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: imagePath != null
-                  ? Padding(
-                      padding: const EdgeInsets.all(6),
-                      child: Image.asset(imagePath!, fit: BoxFit.contain),
-                    )
-                  : Icon(
-                      Icons.show_chart,
-                      color: _cMain.withValues(alpha: 0.4),
-                    ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: _cMain.withValues(alpha: 0.6),
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    description,
-                    style: TextStyle(color: _cGrayText.withValues(alpha: 0.7)),
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: _cMain.withValues(alpha: 0.06),
-                borderRadius: BorderRadius.circular(999),
-              ),
-              child: Text(
-                'COMING SOON',
-                style: TextStyle(
-                  color: _cMain.withValues(alpha: 0.6),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 12,
-                ),
-              ),
-            ),
-          ],
         ),
       ),
     );

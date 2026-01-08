@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../domain/answer_input.dart';
-import '../domain/scoring.dart';
 import '../domain/enums.dart';
 import 'widgets/answer_fields.dart';
 import 'widgets/answer_keypad.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
-const _cAccent = Color(0xFF2DD4BF);
+const _cMain = Color(0xFF0284C7);
+const _cSuccess = Color(0xFF22C55E);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
@@ -22,18 +22,14 @@ class PracticePresentation extends StatefulWidget {
     required this.elapsedText,
     required this.feedback,
     required this.countdownText,
-    required this.quadraticCoefficients,
     required this.canSubmit,
     required this.onDigit,
     required this.onBackspace,
     required this.onClear,
     required this.onSubmit,
     required this.onFinish,
-    required this.onSelectFactorField,
-    required this.onSelectPrimeField,
-    required this.onToggleSign,
-    this.factorizationInput,
-    this.primeInput,
+    required this.inputState,
+    required this.allowedDigits,
   });
 
   final PracticeSessionInfo sessionInfo;
@@ -42,18 +38,14 @@ class PracticePresentation extends StatefulWidget {
   final String elapsedText;
   final AnswerFeedback? feedback;
   final String? countdownText;
-  final ExpandedCoefficients? quadraticCoefficients;
   final bool canSubmit;
   final void Function(int digit) onDigit;
   final VoidCallback onBackspace;
   final VoidCallback onClear;
   final VoidCallback onSubmit;
   final VoidCallback onFinish;
-  final void Function(FactorField field) onSelectFactorField;
-  final void Function(int index) onSelectPrimeField;
-  final VoidCallback? onToggleSign;
-  final FactorizationInputState? factorizationInput;
-  final PrimeInputState? primeInput;
+  final AnswerInputState inputState;
+  final Set<int>? allowedDigits;
 
   @override
   State<PracticePresentation> createState() => _PracticePresentationState();
@@ -131,6 +123,9 @@ class _PracticePresentationState extends State<PracticePresentation>
       ),
       body: Stack(
         children: [
+          const Positioned.fill(
+            child: WavyBackground(),
+          ),
           Column(
             children: [
               Padding(
@@ -173,32 +168,25 @@ class _PracticePresentationState extends State<PracticePresentation>
                               ),
                             ),
                             const SizedBox(height: 12),
-                            if (widget.quadraticCoefficients != null)
-                              _QuadraticText(
-                                coefficients: widget.quadraticCoefficients!,
-                                style: const TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w800,
-                                  color: _cMain,
+                            Text(
+                              widget.questionText,
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                fontSize: _questionFontSize(
+                                  widget.questionText,
                                 ),
-                              )
-                            else
-                              Text(
-                                widget.questionText,
-                                textAlign: TextAlign.center,
-                                style: const TextStyle(
-                                  fontSize: 40,
-                                  fontWeight: FontWeight.w800,
-                                  color: _cMain,
-                                ),
+                                fontWeight: FontWeight.w800,
+                                color: _cMain,
+                                height: 1.4,
                               ),
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(height: 12),
-                      const Text(
+                      Text(
                         '答え',
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: _cMain,
                           fontWeight: FontWeight.w800,
                         ),
@@ -226,19 +214,7 @@ class _PracticePresentationState extends State<PracticePresentation>
                           ),
                           child: Builder(
                             builder: (context) {
-                              if (widget.factorizationInput != null) {
-                                return FactorizationAnswerFields(
-                                  state: widget.factorizationInput!,
-                                  onSelect: widget.onSelectFactorField,
-                                );
-                              }
-                              if (widget.primeInput != null) {
-                                return PrimeFactorAnswerFields(
-                                  state: widget.primeInput!,
-                                  onSelect: widget.onSelectPrimeField,
-                                );
-                              }
-                              return const SizedBox.shrink();
+                              return AnswerInputField(state: widget.inputState);
                             },
                           ),
                         ),
@@ -257,8 +233,9 @@ class _PracticePresentationState extends State<PracticePresentation>
                 onBackspace: widget.onBackspace,
                 onClear: widget.onClear,
                 onSubmit: widget.onSubmit,
-                onToggleSign: widget.onToggleSign,
+                onToggleSign: null,
                 canSubmit: widget.canSubmit,
+                allowedDigits: widget.allowedDigits,
               ),
             ],
           ),
@@ -273,11 +250,31 @@ class _PracticePresentationState extends State<PracticePresentation>
 
   String _title(Category category) {
     switch (category) {
-      case Category.factorization:
-        return '因数分解';
-      case Category.primeFactorization:
-        return '素因数分解';
+      case Category.pseudocodeExecution:
+        return '疑似コードの実行結果';
+      case Category.controlFlowTrace:
+        return 'if / for / while の処理追跡';
+      case Category.binaryToDecimal:
+        return '2進数→10進数';
+      case Category.decimalToBinary:
+        return '10進数→2進数';
+      case Category.binaryMixed:
+        return '2進数/10進数ミックス';
     }
+  }
+
+  double _questionFontSize(String text) {
+    final lines = '\n'.allMatches(text).length + 1;
+    if (lines >= 6) {
+      return 18;
+    }
+    if (lines >= 4) {
+      return 22;
+    }
+    if (text.length >= 40) {
+      return 22;
+    }
+    return 32;
   }
 }
 
@@ -326,7 +323,7 @@ class _FeedbackOverlay extends StatelessWidget {
         ? 'assets/images/maru.png'
         : 'assets/images/batu.png';
     final overlay = feedback == AnswerFeedback.correct
-        ? _cAccent.withValues(alpha: 0.12)
+        ? _cSuccess.withValues(alpha: 0.12)
         : Colors.black.withValues(alpha: 0.08);
     return Positioned.fill(
       child: IgnorePointer(
@@ -437,73 +434,5 @@ class _SoftCard extends StatelessWidget {
         child: child,
       ),
     );
-  }
-}
-
-class _QuadraticText extends StatelessWidget {
-  const _QuadraticText({
-    required this.coefficients,
-    required this.style,
-  });
-
-  final ExpandedCoefficients coefficients;
-  final TextStyle? style;
-
-  @override
-  Widget build(BuildContext context) {
-    final spans = <InlineSpan>[];
-    _appendTerm(spans, coefficients.A, variable: 'x', power: '2', isFirst: true);
-    _appendTerm(spans, coefficients.B, variable: 'x');
-    _appendTerm(spans, coefficients.C, variable: '');
-
-    return RichText(
-      text: TextSpan(
-        style: style,
-        children: spans,
-      ),
-    );
-  }
-
-  void _appendTerm(
-    List<InlineSpan> spans,
-    int coefficient, {
-    required String variable,
-    String? power,
-    bool isFirst = false,
-  }) {
-    if (coefficient == 0) {
-      return;
-    }
-    final absValue = coefficient.abs();
-    final sign = coefficient < 0 ? '-' : '+';
-
-    if (isFirst) {
-      if (coefficient < 0) {
-        spans.add(TextSpan(text: '-'));
-      }
-    } else {
-      spans.add(TextSpan(text: ' $sign '));
-    }
-
-    if (absValue != 1 || variable.isEmpty) {
-      spans.add(TextSpan(text: absValue.toString()));
-    }
-    if (variable.isNotEmpty) {
-      spans.add(TextSpan(text: variable));
-      if (power != null) {
-        spans.add(
-          WidgetSpan(
-            alignment: PlaceholderAlignment.top,
-            child: Transform.translate(
-              offset: const Offset(0, -6),
-              child: Text(
-                power,
-                style: style?.copyWith(fontSize: (style?.fontSize ?? 20) * 0.65),
-              ),
-            ),
-          ),
-        );
-      }
-    }
   }
 }

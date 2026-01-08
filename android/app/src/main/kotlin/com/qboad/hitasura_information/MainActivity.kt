@@ -1,4 +1,4 @@
-package com.qboad.hitasura_math
+package com.qboad.hitasura_information
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,6 +1,9 @@
 enum Category {
-  factorization,
-  primeFactorization,
+  pseudocodeExecution,
+  controlFlowTrace,
+  binaryToDecimal,
+  decimalToBinary,
+  binaryMixed,
 }
 
 enum PracticeMode {

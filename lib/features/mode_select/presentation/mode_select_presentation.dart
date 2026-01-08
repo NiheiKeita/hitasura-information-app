@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../practice/domain/enums.dart';
 import '../../../widgets/pressable_surface.dart';
+import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
-const _cMain = Color(0xFF1E3A8A);
-const _cAccent = Color(0xFF2DD4BF);
+const _cMain = Color(0xFF0284C7);
+const _cAccent = Color(0xFF38BDF8);
 const _cGrayText = Color(0xFF64748B);
 const _cGrayBorder = Color(0xFFE5E7EB);
 
@@ -44,138 +45,145 @@ class ModeSelectPresentation extends StatelessWidget {
         surfaceTintColor: _cBg,
         centerTitle: false,
       ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+      body: Stack(
         children: [
-          Text(
-            _categoryLabel(category),
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.w800,
-              color: _cMain,
-            ),
+          const Positioned.fill(
+            child: WavyBackground(),
           ),
-          const SizedBox(height: 6),
-          const Text(
-            'モードと難易度を選ぶ',
-            style: TextStyle(color: _cGrayText),
-          ),
-          const SizedBox(height: 20),
-          _SoftCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  'モード',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: _cMain,
-                  ),
+          ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            children: [
+              Text(
+                _categoryLabel(category),
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w800,
+                  color: _cMain,
                 ),
-                const SizedBox(height: 12),
-                Row(
+              ),
+              const SizedBox(height: 6),
+              const Text(
+                'モードと難易度を選ぶ',
+                style: TextStyle(color: _cGrayText),
+              ),
+              const SizedBox(height: 20),
+              _SoftCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _ModeOptionCard(
-                        label: '10問TA',
-                        description: 'テンポ重視',
-                        selected: mode == PracticeMode.timeAttack10,
-                        onTap: () => onModeChanged(PracticeMode.timeAttack10),
+                    const Text(
+                      'モード',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: _cMain,
                       ),
                     ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _ModeOptionCard(
-                        label: '無限',
-                        description: 'ずっと解く',
-                        selected: mode == PracticeMode.infinite,
-                        onTap: () => onModeChanged(PracticeMode.infinite),
-                      ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _ModeOptionCard(
+                            label: '10問TA',
+                            description: 'テンポ重視',
+                            selected: mode == PracticeMode.timeAttack10,
+                            onTap: () => onModeChanged(PracticeMode.timeAttack10),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: _ModeOptionCard(
+                            label: '無限',
+                            description: 'ずっと解く',
+                            selected: mode == PracticeMode.infinite,
+                            onTap: () => onModeChanged(PracticeMode.infinite),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 20),
-          _SoftCard(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '難易度',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w800,
-                    color: _cMain,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Row(
+              ),
+              const SizedBox(height: 20),
+              _SoftCard(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: _OptionButton(
-                        label: 'Easy',
-                        selected: difficulty == Difficulty.easy,
-                        onTap: () => onDifficultyChanged(Difficulty.easy),
+                    const Text(
+                      '難易度',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        color: _cMain,
                       ),
                     ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _OptionButton(
-                        label: 'Normal',
-                        selected: difficulty == Difficulty.normal,
-                        onTap: () => onDifficultyChanged(Difficulty.normal),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: _OptionButton(
-                        label: 'Hard',
-                        selected: difficulty == Difficulty.hard,
-                        onTap: () => onDifficultyChanged(Difficulty.hard),
-                      ),
+                    const SizedBox(height: 12),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _OptionButton(
+                            label: 'Easy',
+                            selected: difficulty == Difficulty.easy,
+                            onTap: () => onDifficultyChanged(Difficulty.easy),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _OptionButton(
+                            label: 'Normal',
+                            selected: difficulty == Difficulty.normal,
+                            onTap: () => onDifficultyChanged(Difficulty.normal),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: _OptionButton(
+                            label: 'Hard',
+                            selected: difficulty == Difficulty.hard,
+                            onTap: () => onDifficultyChanged(Difficulty.hard),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 28),
-          SizedBox(
-            width: double.infinity,
-            child: PressableSurface(
-              onTap: onStart,
-              borderRadius: BorderRadius.circular(20),
-              pressedOffset: const Offset(0, 0.04),
-              decorationBuilder: (pressed) => BoxDecoration(
-                color: _cAccent,
-                borderRadius: BorderRadius.circular(20),
-                boxShadow: [
-                  BoxShadow(
-                    color: const Color(0x22000000),
-                    blurRadius: pressed ? 4 : 10,
-                    offset: Offset(0, pressed ? 2 : 6),
-                  ),
-                ],
               ),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Center(
-                  child: Text(
-                    'スタート',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white,
+              const SizedBox(height: 28),
+              SizedBox(
+                width: double.infinity,
+                child: PressableSurface(
+                  onTap: onStart,
+                  borderRadius: BorderRadius.circular(20),
+                  pressedOffset: const Offset(0, 0.04),
+                  decorationBuilder: (pressed) => BoxDecoration(
+                    color: _cAccent,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0x22000000),
+                        blurRadius: pressed ? 4 : 10,
+                        offset: Offset(0, pressed ? 2 : 6),
+                      ),
+                    ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16),
+                    child: Center(
+                      child: Text(
+                        'スタート',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            ),
+              const SizedBox(height: 8),
+            ],
           ),
-          const SizedBox(height: 8),
         ],
       ),
     );
@@ -183,10 +191,16 @@ class ModeSelectPresentation extends StatelessWidget {
 
   String _categoryLabel(Category category) {
     switch (category) {
-      case Category.factorization:
-        return '因数分解';
-      case Category.primeFactorization:
-        return '素因数分解';
+      case Category.pseudocodeExecution:
+        return '疑似コードの実行結果';
+      case Category.controlFlowTrace:
+        return 'if / for / while の処理追跡';
+      case Category.binaryToDecimal:
+        return '2進数→10進数';
+      case Category.decimalToBinary:
+        return '10進数→2進数';
+      case Category.binaryMixed:
+        return '2進数/10進数ミックス';
     }
   }
 }
