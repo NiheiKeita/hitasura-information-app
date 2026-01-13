@@ -50,7 +50,7 @@ class FakeStatsRepository implements StatsRepository {
     return const StatsSummary(
       todayAnswered: 0,
       todayCorrect: 0,
-      last7DaysAnswered: 0,
+      last7DaysCorrect: 0,
       totalsAnswered: 0,
       totalsCorrect: 0,
       bestRecords: [],

@@ -34,9 +34,9 @@ void main() {
     expect(daily?.answered, 2);
     expect(daily?.correct, 1);
     expect(daily?.categoryCounts[Category.pseudocodeExecution], 1);
-    expect(daily?.categoryCounts[Category.binaryToDecimal], 1);
+    expect(daily?.categoryCounts[Category.binaryToDecimal], 0);
     expect(daily?.modeCounts[PracticeMode.infinite], 1);
-    expect(daily?.modeCounts[PracticeMode.timeAttack10], 1);
+    expect(daily?.modeCounts[PracticeMode.timeAttack10], 0);
   });
 
   test('loadMonthlyStats returns only studied days', () async {

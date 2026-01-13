@@ -28,7 +28,7 @@ class HomeContainer extends StatefulWidget {
 }
 
 class _HomeContainerState extends State<HomeContainer> {
-  int _todayAnswered = 0;
+  int _todayCorrect = 0;
 
   @override
   void initState() {
@@ -44,14 +44,14 @@ class _HomeContainerState extends State<HomeContainer> {
       return;
     }
     setState(() {
-      _todayAnswered = summary.todayAnswered;
+      _todayCorrect = summary.todayCorrect;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return HomePresentation(
-      todayAnswered: _todayAnswered,
+      todayCorrect: _todayCorrect,
       onSelectCategory: widget.onSelectCategory,
       onOpenStats: widget.onOpenStats,
       onOpenRanking: widget.onOpenRanking,
