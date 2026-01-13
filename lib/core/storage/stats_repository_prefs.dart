@@ -24,10 +24,13 @@ class StatsRepositoryPrefs implements StatsRepository {
 
     final updatedCategoryCounts =
         Map<Category, int>.from(existing.categoryCounts);
-    updatedCategoryCounts[category] = (updatedCategoryCounts[category] ?? 0) + 1;
     final updatedModeCounts =
         Map<PracticeMode, int>.from(existing.modeCounts);
-    updatedModeCounts[mode] = (updatedModeCounts[mode] ?? 0) + 1;
+    if (correct) {
+      updatedCategoryCounts[category] =
+          (updatedCategoryCounts[category] ?? 0) + 1;
+      updatedModeCounts[mode] = (updatedModeCounts[mode] ?? 0) + 1;
+    }
 
     final updated = existing.copyWith(
       answered: existing.answered + 1,
@@ -123,7 +126,7 @@ class StatsRepositoryPrefs implements StatsRepository {
       final date = now.subtract(Duration(days: i));
       final stats = await loadDailyStats(date: date);
       if (stats != null) {
-        last7Days += stats.answered;
+        last7Days += stats.correct;
       } else {
         final key = _formatDateKey(date);
         last7Days += _prefs.getInt(PrefsKeys.dailyCorrect(key)) ?? 0;
@@ -158,7 +161,7 @@ class StatsRepositoryPrefs implements StatsRepository {
     return StatsSummary(
       todayAnswered: todayAnswered,
       todayCorrect: todayCorrect,
-      last7DaysAnswered: last7Days,
+      last7DaysCorrect: last7Days,
       totalsAnswered: totalsAnswered,
       totalsCorrect: totalsCorrect,
       bestRecords: bestRecords,

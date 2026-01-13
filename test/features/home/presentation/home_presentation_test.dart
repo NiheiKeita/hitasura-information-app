@@ -16,7 +16,7 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         home: HomePresentation(
-          todayAnswered: 3,
+          todayCorrect: 3,
           onSelectCategory: (category) => selected = category,
           onOpenStats: () => openedStats = true,
           onOpenRanking: () => openedRanking = true,

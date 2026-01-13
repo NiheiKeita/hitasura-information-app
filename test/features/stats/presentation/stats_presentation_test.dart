@@ -11,7 +11,7 @@ void main() {
     final summary = StatsSummary(
       todayAnswered: 0,
       todayCorrect: 5,
-      last7DaysAnswered: 42,
+      last7DaysCorrect: 42,
       totalsAnswered: 0,
       totalsCorrect: 123,
       bestRecords: [
