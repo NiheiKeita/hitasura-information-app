@@ -4,7 +4,7 @@ class StatsSummary {
   const StatsSummary({
     required this.todayAnswered,
     required this.todayCorrect,
-    required this.last7DaysAnswered,
+    required this.last7DaysCorrect,
     required this.totalsAnswered,
     required this.totalsCorrect,
     required this.bestRecords,
@@ -12,7 +12,7 @@ class StatsSummary {
 
   final int todayAnswered;
   final int todayCorrect;
-  final int last7DaysAnswered;
+  final int last7DaysCorrect;
   final int totalsAnswered;
   final int totalsCorrect;
   final List<BestRecordEntry> bestRecords;

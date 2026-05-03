@@ -86,7 +86,7 @@ class StatsPresentation extends StatelessWidget {
               _sectionTitle(context, '直近7日合計'),
               _BigStatCard(
                 label: '7日間の正解数',
-                value: summary.last7DaysAnswered.toString(),
+                value: summary.last7DaysCorrect.toString(),
               ),
               const SizedBox(height: 20),
               _sectionTitle(context, '総計'),
@@ -500,7 +500,7 @@ class _MiniHeatmap extends StatelessWidget {
       children: [
         for (final day in days)
           _HeatmapCell(
-            count: stats[day]?.answered ?? 0,
+            count: stats[day]?.correct ?? 0,
           ),
       ],
     );

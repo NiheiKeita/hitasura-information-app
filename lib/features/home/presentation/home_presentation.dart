@@ -13,14 +13,14 @@ const _cGrayBorder = Color(0xFFE5E7EB);
 class HomePresentation extends StatelessWidget {
   const HomePresentation({
     super.key,
-    required this.todayAnswered,
+    required this.todayCorrect,
     required this.onSelectCategory,
     required this.onOpenStats,
     required this.onOpenRanking,
     required this.onOpenMenu,
   });
 
-  final int todayAnswered;
+  final int todayCorrect;
   final void Function(Category category) onSelectCategory;
   final VoidCallback onOpenStats;
   final VoidCallback onOpenRanking;
@@ -126,7 +126,7 @@ class HomePresentation extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            '今日の正解: $todayAnswered',
+                            '今日の正解: $todayCorrect',
                             style: const TextStyle(
                               color: _cGrayText,
                               fontWeight: FontWeight.w600,

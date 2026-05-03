@@ -163,50 +163,14 @@ class CalendarDayDetailSheet extends StatelessWidget {
                 ),
               )
             else ...[
-              _SummaryRow(label: '合計', value: '解いた数 ${data.answered}問'),
               _SummaryRow(label: '正解数', value: '${data.correct}問'),
               const SizedBox(height: 12),
               const Text(
-                '内訳',
+                '正解内訳',
                 style: TextStyle(color: _cMain, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 6),
-              _SummaryRow(
-                label: '疑似コードの実行結果',
-                value:
-                    '${data.categoryCounts[Category.pseudocodeExecution] ?? 0}問',
-              ),
-              _SummaryRow(
-                label: 'if / for / while の処理追跡',
-                value:
-                    '${data.categoryCounts[Category.controlFlowTrace] ?? 0}問',
-              ),
-              _SummaryRow(
-                label: '2進数→10進数',
-                value: '${data.categoryCounts[Category.binaryToDecimal] ?? 0}問',
-              ),
-              _SummaryRow(
-                label: '10進数→2進数',
-                value: '${data.categoryCounts[Category.decimalToBinary] ?? 0}問',
-              ),
-              _SummaryRow(
-                label: '2進数/10進数ミックス',
-                value: '${data.categoryCounts[Category.binaryMixed] ?? 0}問',
-              ),
-              const SizedBox(height: 12),
-              const Text(
-                'モード内訳',
-                style: TextStyle(color: _cMain, fontWeight: FontWeight.w700),
-              ),
-              const SizedBox(height: 6),
-              _SummaryRow(
-                label: '無限',
-                value: '${data.modeCounts[PracticeMode.infinite] ?? 0}問',
-              ),
-              _SummaryRow(
-                label: '10問タイムアタック',
-                value: '${data.modeCounts[PracticeMode.timeAttack10] ?? 0}問',
-              ),
+              ..._buildCategoryBreakdown(data),
             ],
           ],
         ),
@@ -220,6 +184,75 @@ class CalendarDayDetailSheet extends StatelessWidget {
     final day = date.day.toString().padLeft(2, '0');
     return '$year/$month/$day';
   }
+
+  List<Widget> _buildCategoryBreakdown(DailyStats data) {
+    final counts = _correctCategoryCounts(data);
+    return [
+      _SummaryRow(
+        label: '疑似コードの実行結果',
+        value: '${counts[Category.pseudocodeExecution] ?? 0}問',
+      ),
+      _SummaryRow(
+        label: 'if / for / while の処理追跡',
+        value: '${counts[Category.controlFlowTrace] ?? 0}問',
+      ),
+      _SummaryRow(
+        label: '2進数→10進数',
+        value: '${counts[Category.binaryToDecimal] ?? 0}問',
+      ),
+      _SummaryRow(
+        label: '10進数→2進数',
+        value: '${counts[Category.decimalToBinary] ?? 0}問',
+      ),
+      _SummaryRow(
+        label: '2進数/10進数ミックス',
+        value: '${counts[Category.binaryMixed] ?? 0}問',
+      ),
+    ];
+  }
+
+  Map<Category, int> _correctCategoryCounts(DailyStats data) {
+    final counts = data.categoryCounts;
+    final total = counts.values.fold(0, (sum, value) => sum + value);
+    if (total == 0) {
+      return {
+        for (final category in Category.values) category: 0,
+      };
+    }
+    if (total == data.correct || data.correct == 0) {
+      return counts;
+    }
+
+    final scaled = <Category, int>{};
+    final fractions = <_CategoryFraction>[];
+    var allocated = 0;
+    for (final category in Category.values) {
+      final count = counts[category] ?? 0;
+      final exact = count * data.correct / total;
+      final floored = exact.floor();
+      scaled[category] = floored;
+      allocated += floored;
+      fractions.add(_CategoryFraction(category, exact - floored));
+    }
+
+    var remaining = data.correct - allocated;
+    fractions.sort((a, b) => b.fraction.compareTo(a.fraction));
+    var index = 0;
+    while (remaining > 0 && fractions.isNotEmpty) {
+      final category = fractions[index % fractions.length].category;
+      scaled[category] = (scaled[category] ?? 0) + 1;
+      remaining -= 1;
+      index += 1;
+    }
+    return scaled;
+  }
+}
+
+class _CategoryFraction {
+  const _CategoryFraction(this.category, this.fraction);
+
+  final Category category;
+  final double fraction;
 }
 
 class _SummaryRow extends StatelessWidget {
