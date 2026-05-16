@@ -1,12 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/features/intro/presentation/intro_presentation.dart';
 
+import '../../../helpers/localized_test_app.dart';
+
 void main() {
   testWidgets('InfoIntroPresentation shows sections', (tester) async {
     await tester.pumpWidget(
-      const MaterialApp(
+      const LocalizedTestApp(
         home: InfoIntroPresentation(
           title: '疑似コードの実行結果',
           sections: [

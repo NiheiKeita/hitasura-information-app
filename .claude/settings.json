@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter analyze *)",
+      "Bash(flutter test *)",
+      "Bash(find /Users/niheikeita/develop/hitasura-suugaku-app -type f -name \"pubspec.yaml\" | head -5)",
+      "Read(//Users/niheikeita/develop/hitasura-suugaku-app/**)",
+      "Bash(flutter gen-l10n *)"
+    ]
+  }
+}

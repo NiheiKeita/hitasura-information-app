@@ -9,18 +9,23 @@ import 'core/clock/clock.dart';
 import 'core/storage/stats_repository_prefs.dart';
 import 'features/practice/domain/generators/problem_generator.dart';
 import 'features/practice/domain/generators/info_problem_generator.dart';
+import 'features/records/data/record_repository.dart';
+import 'features/records/data/record_repository_prefs.dart';
+import 'l10n/app_localizations.dart';
 import 'router.dart';
 
 class App extends StatelessWidget {
   const App({
     super.key,
     required this.statsRepository,
+    required this.recordRepository,
     required this.infoProblemGenerator,
     required this.clock,
     required this.adService,
   });
 
   final StatsRepositoryPrefs statsRepository;
+  final RecordRepository recordRepository;
   final InfoProblemGenerator infoProblemGenerator;
   final Clock clock;
   final AdService adService;
@@ -29,13 +34,16 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = createRouter(
       statsRepository: statsRepository,
+      recordRepository: recordRepository,
       infoProblemGenerator: infoProblemGenerator,
       clock: clock,
       adService: adService,
     );
 
     return MaterialApp.router(
-      title: 'Hitasura Jouhou',
+      onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: const Color(0xFF0EA5E9),
@@ -95,6 +103,7 @@ class App extends StatelessWidget {
     await adService.init();
     return App(
       statsRepository: StatsRepositoryPrefs(prefs: prefs),
+      recordRepository: RecordRepositoryPrefs(prefs: prefs),
       infoProblemGenerator: FixedInfoProblemGenerator(),
       clock: SystemClock(),
       adService: adService,

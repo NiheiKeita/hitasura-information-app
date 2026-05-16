@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../practice/domain/enums.dart';
 import '../../../widgets/pressable_surface.dart';
 import '../../../widgets/wavy_background.dart';
@@ -30,12 +31,13 @@ class ModeSelectPresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          'モード選択',
-          style: TextStyle(
+        title: Text(
+          l10n.modeSelectTitle,
+          style: const TextStyle(
             color: _cMain,
             fontWeight: FontWeight.w800,
           ),
@@ -54,7 +56,7 @@ class ModeSelectPresentation extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             children: [
               Text(
-                _categoryLabel(category),
+                category.label(l10n),
                 style: const TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
@@ -62,18 +64,18 @@ class ModeSelectPresentation extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'モードと難易度を選ぶ',
-                style: TextStyle(color: _cGrayText),
+              Text(
+                l10n.modeSelectSubtitle,
+                style: const TextStyle(color: _cGrayText),
               ),
               const SizedBox(height: 20),
               _SoftCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'モード',
-                      style: TextStyle(
+                    Text(
+                      l10n.modeSelectModeLabel,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: _cMain,
@@ -84,8 +86,8 @@ class ModeSelectPresentation extends StatelessWidget {
                       children: [
                         Expanded(
                           child: _ModeOptionCard(
-                            label: '10問TA',
-                            description: 'テンポ重視',
+                            label: l10n.modePracticeMode10,
+                            description: l10n.modePracticeMode10Desc,
                             selected: mode == PracticeMode.timeAttack10,
                             onTap: () => onModeChanged(PracticeMode.timeAttack10),
                           ),
@@ -93,8 +95,8 @@ class ModeSelectPresentation extends StatelessWidget {
                         const SizedBox(width: 12),
                         Expanded(
                           child: _ModeOptionCard(
-                            label: '無限',
-                            description: 'ずっと解く',
+                            label: l10n.modePracticeModeInfinite,
+                            description: l10n.modePracticeModeInfiniteDesc,
                             selected: mode == PracticeMode.infinite,
                             onTap: () => onModeChanged(PracticeMode.infinite),
                           ),
@@ -109,9 +111,9 @@ class ModeSelectPresentation extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '難易度',
-                      style: TextStyle(
+                    Text(
+                      l10n.modeDifficultyLabel,
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
                         color: _cMain,
@@ -166,12 +168,12 @@ class ModeSelectPresentation extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
                     child: Center(
                       child: Text(
-                        'スタート',
-                        style: TextStyle(
+                        l10n.modeSelectStart,
+                        style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
                           color: Colors.white,
@@ -187,21 +189,6 @@ class ModeSelectPresentation extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _categoryLabel(Category category) {
-    switch (category) {
-      case Category.pseudocodeExecution:
-        return '疑似コードの実行結果';
-      case Category.controlFlowTrace:
-        return 'if / for / while の処理追跡';
-      case Category.binaryToDecimal:
-        return '2進数→10進数';
-      case Category.decimalToBinary:
-        return '10進数→2進数';
-      case Category.binaryMixed:
-        return '2進数/10進数ミックス';
-    }
   }
 }
 

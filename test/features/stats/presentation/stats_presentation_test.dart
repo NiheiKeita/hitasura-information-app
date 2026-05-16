@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/core/storage/stats_repository.dart';
 import 'package:flutter_example_app/features/practice/domain/enums.dart';
 import 'package:flutter_example_app/features/stats/presentation/stats_presentation.dart';
 import 'package:flutter_example_app/widgets/wavy_background.dart';
+
+import '../../../helpers/localized_test_app.dart';
 
 void main() {
   testWidgets('StatsPresentation shows summary values', (tester) async {
@@ -14,6 +15,8 @@ void main() {
       last7DaysCorrect: 42,
       totalsAnswered: 0,
       totalsCorrect: 123,
+      currentStreak: 0,
+      bestStreak: 0,
       bestRecords: [
         BestRecordEntry(
           category: Category.pseudocodeExecution,
@@ -25,7 +28,7 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: StatsPresentation(
           summary: summary,
           heatmapStats: const {},

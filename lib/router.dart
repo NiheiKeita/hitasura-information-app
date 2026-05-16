@@ -9,11 +9,13 @@ import 'features/mode_select/container/mode_select_container.dart';
 import 'features/practice/container/practice_container.dart';
 import 'features/practice/domain/generators/problem_generator.dart';
 import 'features/practice/domain/problem.dart';
+import 'features/records/data/record_repository.dart';
 import 'features/result/container/result_container.dart';
 import 'features/tabs/tabs_container.dart';
 
 GoRouter createRouter({
   required StatsRepository statsRepository,
+  required RecordRepository recordRepository,
   required InfoProblemGenerator infoProblemGenerator,
   required Clock clock,
   required AdService adService,
@@ -60,6 +62,7 @@ GoRouter createRouter({
             difficulty: args.difficulty,
             infoProblemGenerator: infoProblemGenerator,
             statsRepository: statsRepository,
+            recordRepository: recordRepository,
             clock: clock,
             adService: adService,
             onFinish: (result) => context.goNamed('result', extra: result),

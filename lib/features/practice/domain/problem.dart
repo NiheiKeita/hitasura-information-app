@@ -1,3 +1,4 @@
+import '../../records/domain/record_comparison.dart';
 import 'enums.dart';
 
 enum AnswerFormat {
@@ -46,6 +47,7 @@ class PracticeResult {
     required this.correctCount,
     required this.maxStreak,
     required this.elapsedMillis,
+    this.recordComparison,
   });
 
   final Category category;
@@ -55,6 +57,7 @@ class PracticeResult {
   final int correctCount;
   final int maxStreak;
   final int elapsedMillis;
+  final RecordComparison? recordComparison;
 
   int get missCount => answeredCount - correctCount;
 

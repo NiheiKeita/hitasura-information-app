@@ -4,6 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_example_app/features/menu/presentation/menu_presentation.dart';
 import 'package:flutter_example_app/widgets/wavy_background.dart';
 
+import '../../../helpers/localized_test_app.dart';
+
 void main() {
   testWidgets('MenuPresentation triggers intro callbacks', (tester) async {
     var openedPseudocode = false;
@@ -14,7 +16,7 @@ void main() {
     var openedLicenses = false;
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: MenuPresentation(
           onOpenPseudocodeIntro: () => openedPseudocode = true,
           onOpenControlFlowIntro: () => openedControl = true,

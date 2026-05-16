@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/l10n/l10n.dart';
 import '../../../../widgets/pressable_surface.dart';
 
 const _cBg = Color(0xFFFFFFFF);
@@ -30,6 +31,7 @@ class AnswerKeypad extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final useBinaryKeypad = allowedDigits != null &&
         allowedDigits!.length == 2 &&
         allowedDigits!.contains(0) &&
@@ -54,7 +56,7 @@ class AnswerKeypad extends StatelessWidget {
                 children: [
                   Expanded(child: _actionButton('⌫', onBackspace)),
                   const SizedBox(width: 8),
-                  Expanded(child: _actionButton('クリア', onClear)),
+                  Expanded(child: _actionButton(l10n.practiceClear, onClear)),
                 ],
               ),
             ] else ...[
@@ -70,7 +72,7 @@ class AnswerKeypad extends StatelessWidget {
                   const SizedBox(width: 8),
                   Expanded(child: _digitButton(context, 0)),
                   const SizedBox(width: 8),
-                  Expanded(child: _actionButton('クリア', onClear)),
+                  Expanded(child: _actionButton(l10n.practiceClear, onClear)),
                 ],
               ),
             ],
@@ -110,7 +112,7 @@ class AnswerKeypad extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(vertical: 9),
                       child: Center(
                         child: Text(
-                          '回答する',
+                          l10n.practiceSubmit,
                           style: TextStyle(
                             color: canSubmit ? Colors.white : _cGrayText,
                             fontWeight: FontWeight.w700,

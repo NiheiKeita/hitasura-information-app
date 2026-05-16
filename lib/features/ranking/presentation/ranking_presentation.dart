@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../../widgets/wavy_background.dart';
 
 const _cBg = Color(0xFFFFFFFF);
@@ -14,12 +15,13 @@ class RankingPresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          'Ranking',
-          style: TextStyle(
+        title: Text(
+          l10n.tabRanking,
+          style: const TextStyle(
             color: _cMain,
             fontWeight: FontWeight.w800,
           ),
@@ -80,9 +82,9 @@ class RankingPresentation extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'ランキング機能は近日公開予定です',
-                    style: TextStyle(
+                  Text(
+                    l10n.rankingComingSoon,
+                    style: const TextStyle(
                       color: _cMain,
                       fontWeight: FontWeight.w800,
                       fontSize: 16,

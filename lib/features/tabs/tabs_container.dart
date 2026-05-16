@@ -6,6 +6,7 @@ import '../../core/ads/ad_config.dart';
 import '../../core/ads/banner_ad_widget.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/l10n/l10n.dart';
 import '../../core/navigation/route_args.dart';
 import '../../core/storage/stats_repository.dart';
 import '../calendar/container/calendar_container.dart';
@@ -113,111 +114,129 @@ class _TabsContainerState extends State<TabsContainer> {
                           onOpenMenu: () {
                     _homeNavigatorKey.currentState?.push(
                       MaterialPageRoute(
-                        builder: (menuContext) => MenuPresentation(
-                          onOpenPseudocodeIntro: () {
-                            Navigator.of(menuContext).push(
-                              MaterialPageRoute(
-                                builder: (_) => const InfoIntroPresentation(
-                                  title: '疑似コードの実行結果',
-                                  sections: [
-                                    IntroSection(
-                                      title: 'ポイント',
-                                      body: '変数の値がどう変わるかを順番に追います。',
-                                    ),
-                                    IntroSection(
-                                      title: '解き方',
-                                      body:
-                                          '疑似コードを上から実行し、最後の出力や値を入力します。',
-                                    ),
-                                  ],
+                        builder: (menuContext) {
+                          final l10n = menuContext.l10n;
+                          return MenuPresentation(
+                            onOpenPseudocodeIntro: () {
+                              Navigator.of(menuContext).push(
+                                MaterialPageRoute(
+                                  builder: (introContext) {
+                                    final il = introContext.l10n;
+                                    return InfoIntroPresentation(
+                                      title: il.categoryPseudocodeExecution,
+                                      sections: [
+                                        IntroSection(
+                                          title: il.introPointsTitle,
+                                          body: il.introPseudocodePoints,
+                                        ),
+                                        IntroSection(
+                                          title: il.introSolutionTitle,
+                                          body: il.introPseudocodeSolution,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          },
-                          onOpenControlFlowIntro: () {
-                            Navigator.of(menuContext).push(
-                              MaterialPageRoute(
-                                builder: (_) => const InfoIntroPresentation(
-                                  title: 'if / for / while の処理追跡',
-                                  sections: [
-                                    IntroSection(
-                                      title: 'ポイント',
-                                      body: '条件の真偽と繰り返し回数を整理します。',
-                                    ),
-                                    IntroSection(
-                                      title: '解き方',
-                                      body:
-                                          '分岐の結果やループ回数、最終出力を数字で答えます。',
-                                    ),
-                                  ],
+                              );
+                            },
+                            onOpenControlFlowIntro: () {
+                              Navigator.of(menuContext).push(
+                                MaterialPageRoute(
+                                  builder: (introContext) {
+                                    final il = introContext.l10n;
+                                    return InfoIntroPresentation(
+                                      title: il.categoryControlFlowTrace,
+                                      sections: [
+                                        IntroSection(
+                                          title: il.introPointsTitle,
+                                          body: il.introControlFlowPoints,
+                                        ),
+                                        IntroSection(
+                                          title: il.introSolutionTitle,
+                                          body: il.introControlFlowSolution,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          },
-                          onOpenBinaryToDecimalIntro: () {
-                            Navigator.of(menuContext).push(
-                              MaterialPageRoute(
-                                builder: (_) => const InfoIntroPresentation(
-                                  title: '2進数→10進数',
-                                  sections: [
-                                    IntroSection(
-                                      title: 'ポイント',
-                                      body: '各桁の重み(1,2,4,8...)を足し合わせます。',
-                                    ),
-                                    IntroSection(
-                                      title: '解き方',
-                                      body: '2進数を10進数で入力します。',
-                                    ),
-                                  ],
+                              );
+                            },
+                            onOpenBinaryToDecimalIntro: () {
+                              Navigator.of(menuContext).push(
+                                MaterialPageRoute(
+                                  builder: (introContext) {
+                                    final il = introContext.l10n;
+                                    return InfoIntroPresentation(
+                                      title: il.categoryBinaryToDecimal,
+                                      sections: [
+                                        IntroSection(
+                                          title: il.introPointsTitle,
+                                          body: il.introBinaryToDecimalPoints,
+                                        ),
+                                        IntroSection(
+                                          title: il.introSolutionTitle,
+                                          body:
+                                              il.introBinaryToDecimalSolution,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          },
-                          onOpenDecimalToBinaryIntro: () {
-                            Navigator.of(menuContext).push(
-                              MaterialPageRoute(
-                                builder: (_) => const InfoIntroPresentation(
-                                  title: '10進数→2進数',
-                                  sections: [
-                                    IntroSection(
-                                      title: 'ポイント',
-                                      body: '2で割った余りを逆順に並べます。',
-                                    ),
-                                    IntroSection(
-                                      title: '解き方',
-                                      body: '10進数を2進数で入力します。',
-                                    ),
-                                  ],
+                              );
+                            },
+                            onOpenDecimalToBinaryIntro: () {
+                              Navigator.of(menuContext).push(
+                                MaterialPageRoute(
+                                  builder: (introContext) {
+                                    final il = introContext.l10n;
+                                    return InfoIntroPresentation(
+                                      title: il.categoryDecimalToBinary,
+                                      sections: [
+                                        IntroSection(
+                                          title: il.introPointsTitle,
+                                          body: il.introDecimalToBinaryPoints,
+                                        ),
+                                        IntroSection(
+                                          title: il.introSolutionTitle,
+                                          body:
+                                              il.introDecimalToBinarySolution,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          },
-                          onOpenBinaryMixedIntro: () {
-                            Navigator.of(menuContext).push(
-                              MaterialPageRoute(
-                                builder: (_) => const InfoIntroPresentation(
-                                  title: '2進数/10進数ミックス',
-                                  sections: [
-                                    IntroSection(
-                                      title: 'ポイント',
-                                      body: '変換方向を問題文で確認します。',
-                                    ),
-                                    IntroSection(
-                                      title: '解き方',
-                                      body: '指定された形式で答えを入力します。',
-                                    ),
-                                  ],
+                              );
+                            },
+                            onOpenBinaryMixedIntro: () {
+                              Navigator.of(menuContext).push(
+                                MaterialPageRoute(
+                                  builder: (introContext) {
+                                    final il = introContext.l10n;
+                                    return InfoIntroPresentation(
+                                      title: il.categoryBinaryMixed,
+                                      sections: [
+                                        IntroSection(
+                                          title: il.introPointsTitle,
+                                          body: il.introBinaryMixedPoints,
+                                        ),
+                                        IntroSection(
+                                          title: il.introSolutionTitle,
+                                          body: il.introBinaryMixedSolution,
+                                        ),
+                                      ],
+                                    );
+                                  },
                                 ),
-                              ),
-                            );
-                          },
-                          onOpenLicenses: () {
-                            showLicensePage(
-                              context: menuContext,
-                              applicationName: 'ひたすら情報',
-                            );
-                          },
-                        ),
+                              );
+                            },
+                            onOpenLicenses: () {
+                              showLicensePage(
+                                context: menuContext,
+                                applicationName: l10n.appTitle,
+                              );
+                            },
+                          );
+                        },
                       ),
                     );
                   },
@@ -263,18 +282,18 @@ class _TabsContainerState extends State<TabsContainer> {
               HapticFeedback.lightImpact();
               _setIndex(index);
             },
-            items: const [
+            items: [
               BottomNavigationBarItem(
-                icon: Icon(Icons.home),
-                label: 'Home',
+                icon: const Icon(Icons.home),
+                label: context.l10n.tabHome,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.bar_chart),
-                label: 'Stats',
+                icon: const Icon(Icons.bar_chart),
+                label: context.l10n.tabStats,
               ),
               BottomNavigationBarItem(
-                icon: Icon(Icons.emoji_events),
-                label: 'Ranking',
+                icon: const Icon(Icons.emoji_events),
+                label: context.l10n.tabRanking,
               ),
             ],
           ),
