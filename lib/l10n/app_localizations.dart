@@ -698,6 +698,48 @@ abstract class AppLocalizations {
   /// **'Couldn\'t open the link'**
   String get menuOpenLinkError;
 
+  /// No description provided for @rankingSelfTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Ranking'**
+  String get rankingSelfTitle;
+
+  /// No description provided for @rankingWorldButton.
+  ///
+  /// In en, this message translates to:
+  /// **'World Ranking'**
+  String get rankingWorldButton;
+
+  /// No description provided for @rankingRangeToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get rankingRangeToday;
+
+  /// No description provided for @rankingRangeThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get rankingRangeThisWeek;
+
+  /// No description provided for @rankingRangeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get rankingRangeAll;
+
+  /// No description provided for @rankingNoRecords.
+  ///
+  /// In en, this message translates to:
+  /// **'No records yet'**
+  String get rankingNoRecords;
+
+  /// No description provided for @rankingRank.
+  ///
+  /// In en, this message translates to:
+  /// **'#{rank}'**
+  String rankingRank(int rank);
+
   /// No description provided for @rankingComingSoon.
   ///
   /// In en, this message translates to:

@@ -5,6 +5,7 @@ class PracticeRecord {
     required this.id,
     required this.category,
     required this.mode,
+    required this.difficulty,
     required this.clearTimeMillis,
     required this.playedAt,
   });
@@ -12,6 +13,7 @@ class PracticeRecord {
   final String id;
   final Category category;
   final PracticeMode mode;
+  final Difficulty difficulty;
   final int clearTimeMillis;
   final DateTime playedAt;
 
@@ -22,6 +24,7 @@ class PracticeRecord {
       'id': id,
       'category': category.name,
       'mode': mode.name,
+      'difficulty': difficulty.name,
       'clearTimeMillis': clearTimeMillis,
       'playedAt': playedAt.toIso8601String(),
     };
@@ -46,6 +49,16 @@ class PracticeRecord {
         }
       }
       if (category == null) return null;
+      final difficultyName = json['difficulty'];
+      var difficulty = Difficulty.normal;
+      if (difficultyName is String) {
+        for (final d in Difficulty.values) {
+          if (d.name == difficultyName) {
+            difficulty = d;
+            break;
+          }
+        }
+      }
       final clearTimeMillis = _readInt(json['clearTimeMillis']);
       if (clearTimeMillis == null || clearTimeMillis <= 0) return null;
       final playedAtStr = json['playedAt'];
@@ -59,6 +72,7 @@ class PracticeRecord {
         id: id,
         category: category,
         mode: mode,
+        difficulty: difficulty,
         clearTimeMillis: clearTimeMillis,
         playedAt: playedAt,
       );

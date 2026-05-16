@@ -5,6 +5,7 @@ abstract class RecordRepository {
   Future<List<PracticeRecord>> loadRecords({
     required Category category,
     required PracticeMode mode,
+    required Difficulty difficulty,
   });
 
   Future<List<PracticeRecord>> loadAllRecordsForMode({
@@ -13,8 +14,5 @@ abstract class RecordRepository {
 
   Future<void> addRecord(PracticeRecord record);
 
-  Future<void> clear({
-    required Category category,
-    required PracticeMode mode,
-  });
+  Future<void> clear({required Category category, required PracticeMode mode});
 }

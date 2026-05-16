@@ -332,6 +332,29 @@ class AppLocalizationsEn extends AppLocalizations {
   String get menuOpenLinkError => 'Couldn\'t open the link';
 
   @override
+  String get rankingSelfTitle => 'Your Ranking';
+
+  @override
+  String get rankingWorldButton => 'World Ranking';
+
+  @override
+  String get rankingRangeToday => 'Today';
+
+  @override
+  String get rankingRangeThisWeek => 'This week';
+
+  @override
+  String get rankingRangeAll => 'All';
+
+  @override
+  String get rankingNoRecords => 'No records yet';
+
+  @override
+  String rankingRank(int rank) {
+    return '#$rank';
+  }
+
+  @override
   String get rankingComingSoon => 'Ranking is coming soon';
 
   @override

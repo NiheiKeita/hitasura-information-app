@@ -57,10 +57,11 @@ class RecordComparison {
     return RecordComparison(
       mode: mode,
       currentTimeMillis: currentTimeMillis,
-      previousTodayBestMillis:
-          RecordAggregator.bestToday(previousRecords, now),
-      previousWeekBestMillis:
-          RecordAggregator.bestThisWeek(previousRecords, now),
+      previousTodayBestMillis: RecordAggregator.bestToday(previousRecords, now),
+      previousWeekBestMillis: RecordAggregator.bestThisWeek(
+        previousRecords,
+        now,
+      ),
       previousAllTimeBestMillis: RecordAggregator.bestAllTime(previousRecords),
     );
   }

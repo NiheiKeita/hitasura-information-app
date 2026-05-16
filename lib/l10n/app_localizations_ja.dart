@@ -331,6 +331,29 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuOpenLinkError => 'リンクを開けませんでした';
 
   @override
+  String get rankingSelfTitle => '自分ランキング';
+
+  @override
+  String get rankingWorldButton => '世界ランキング';
+
+  @override
+  String get rankingRangeToday => '今日';
+
+  @override
+  String get rankingRangeThisWeek => '今週';
+
+  @override
+  String get rankingRangeAll => '全体';
+
+  @override
+  String get rankingNoRecords => 'まだ記録がありません';
+
+  @override
+  String rankingRank(int rank) {
+    return '$rank位';
+  }
+
+  @override
   String get rankingComingSoon => 'ランキング機能は近日公開予定です';
 
   @override

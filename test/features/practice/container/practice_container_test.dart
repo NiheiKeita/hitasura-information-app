@@ -117,9 +117,15 @@ class FakeRecordRepository implements RecordRepository {
   Future<List<PracticeRecord>> loadRecords({
     required Category category,
     required PracticeMode mode,
+    required Difficulty difficulty,
   }) async {
     return records
-        .where((r) => r.category == category && r.mode == mode)
+        .where(
+          (r) =>
+              r.category == category &&
+              r.mode == mode &&
+              r.difficulty == difficulty,
+        )
         .toList();
   }
 }
@@ -241,8 +247,7 @@ void main() {
     expect(statsRepository.recordBestCalls, 1);
   });
 
-  testWidgets('Manual finish in time attack skips best record',
-      (tester) async {
+  testWidgets('Manual finish in time attack skips best record', (tester) async {
     final statsRepository = FakeStatsRepository();
     final generator = FakeInfoProblemGenerator(
       const InfoProblem(

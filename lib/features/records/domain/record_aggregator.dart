@@ -19,8 +19,7 @@ class RecordAggregator {
     final tomorrow = today.add(const Duration(days: 1));
     return records
         .where(
-          (r) =>
-              !r.playedAt.isBefore(today) && r.playedAt.isBefore(tomorrow),
+          (r) => !r.playedAt.isBefore(today) && r.playedAt.isBefore(tomorrow),
         )
         .toList();
   }
@@ -32,9 +31,7 @@ class RecordAggregator {
     final start = startOfWeek(now);
     final end = start.add(const Duration(days: 7));
     return records
-        .where(
-          (r) => !r.playedAt.isBefore(start) && r.playedAt.isBefore(end),
-        )
+        .where((r) => !r.playedAt.isBefore(start) && r.playedAt.isBefore(end))
         .toList();
   }
 

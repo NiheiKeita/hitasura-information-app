@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/navigation/route_args.dart';
 import '../../core/storage/stats_repository.dart';
+import '../records/data/record_repository.dart';
 import '../calendar/container/calendar_container.dart';
 import '../home/container/home_container.dart';
 import '../intro/presentation/intro_presentation.dart';
@@ -21,10 +22,12 @@ class TabsContainer extends StatefulWidget {
   const TabsContainer({
     super.key,
     required this.statsRepository,
+    required this.recordRepository,
     required this.clock,
   });
 
   final StatsRepository statsRepository;
+  final RecordRepository recordRepository;
   final Clock clock;
 
   @override
@@ -111,7 +114,7 @@ class _TabsContainerState extends State<TabsContainer> {
                   },
                   onOpenStats: () => _setIndex(1),
                   onOpenRanking: () => _setIndex(2),
-                          onOpenMenu: () {
+                  onOpenMenu: () {
                     _homeNavigatorKey.currentState?.push(
                       MaterialPageRoute(
                         builder: (menuContext) {
@@ -175,8 +178,7 @@ class _TabsContainerState extends State<TabsContainer> {
                                         ),
                                         IntroSection(
                                           title: il.introSolutionTitle,
-                                          body:
-                                              il.introBinaryToDecimalSolution,
+                                          body: il.introBinaryToDecimalSolution,
                                         ),
                                       ],
                                     );
@@ -198,8 +200,7 @@ class _TabsContainerState extends State<TabsContainer> {
                                         ),
                                         IntroSection(
                                           title: il.introSolutionTitle,
-                                          body:
-                                              il.introDecimalToBinarySolution,
+                                          body: il.introDecimalToBinarySolution,
                                         ),
                                       ],
                                     );
@@ -265,7 +266,10 @@ class _TabsContainerState extends State<TabsContainer> {
               );
             },
           ),
-          const RankingContainer(),
+          RankingContainer(
+            recordRepository: widget.recordRepository,
+            clock: widget.clock,
+          ),
         ],
       ),
       bottomNavigationBar: Column(

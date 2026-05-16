@@ -28,6 +28,7 @@ GoRouter createRouter({
         name: 'home',
         builder: (context, state) => TabsContainer(
           statsRepository: statsRepository,
+          recordRepository: recordRepository,
           clock: clock,
         ),
       ),

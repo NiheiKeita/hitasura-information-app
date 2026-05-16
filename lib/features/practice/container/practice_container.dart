@@ -123,19 +123,19 @@ class PracticeController extends ChangeNotifier {
     required void Function(PracticeResult result) onFinish,
     required String inputPlaceholder,
     required ProgressInfiniteBuilder progressInfiniteBuilder,
-  })  : sessionInfo = PracticeSessionInfo(
-          category: category,
-          mode: mode,
-          difficulty: difficulty,
-        ),
-        _infoProblemGenerator = infoProblemGenerator,
-        _statsRepository = statsRepository,
-        _recordRepository = recordRepository,
-        _clock = clock,
-        _adService = adService,
-        _onFinish = onFinish,
-        _inputPlaceholder = inputPlaceholder,
-        _progressInfiniteBuilder = progressInfiniteBuilder;
+  }) : sessionInfo = PracticeSessionInfo(
+         category: category,
+         mode: mode,
+         difficulty: difficulty,
+       ),
+       _infoProblemGenerator = infoProblemGenerator,
+       _statsRepository = statsRepository,
+       _recordRepository = recordRepository,
+       _clock = clock,
+       _adService = adService,
+       _onFinish = onFinish,
+       _inputPlaceholder = inputPlaceholder,
+       _progressInfiniteBuilder = progressInfiniteBuilder;
 
   final PracticeSessionInfo sessionInfo;
   final InfoProblemGenerator _infoProblemGenerator;
@@ -202,10 +202,7 @@ class PracticeController extends ChangeNotifier {
   }
 
   AnswerInputState get inputState {
-    return AnswerInputState(
-      text: _inputBuffer,
-      placeholder: _inputPlaceholder,
-    );
+    return AnswerInputState(text: _inputBuffer, placeholder: _inputPlaceholder);
   }
 
   Set<int>? get allowedDigits {
@@ -300,13 +297,11 @@ class PracticeController extends ChangeNotifier {
       return;
     }
 
-    if (sessionInfo.mode == PracticeMode.infinite &&
-        _correctCount % 10 == 0) {
+    if (sessionInfo.mode == PracticeMode.infinite && _correctCount % 10 == 0) {
       await _adService.maybeShowInterstitial('infinite_10');
     }
 
-    if (sessionInfo.mode == PracticeMode.timeAttack10 &&
-        _questionIndex >= 10) {
+    if (sessionInfo.mode == PracticeMode.timeAttack10 && _questionIndex >= 10) {
       finish();
       return;
     }
@@ -338,7 +333,8 @@ class PracticeController extends ChangeNotifier {
     }
 
     RecordComparison? comparison;
-    final shouldSaveRecord = !isManual &&
+    final shouldSaveRecord =
+        !isManual &&
         sessionInfo.mode == PracticeMode.timeAttack10 &&
         elapsedMillis > 0;
     if (shouldSaveRecord) {
@@ -346,6 +342,7 @@ class PracticeController extends ChangeNotifier {
       final previous = await _recordRepository.loadRecords(
         category: sessionInfo.category,
         mode: sessionInfo.mode,
+        difficulty: sessionInfo.difficulty,
       );
       comparison = RecordComparison.build(
         mode: sessionInfo.mode,
@@ -357,6 +354,7 @@ class PracticeController extends ChangeNotifier {
         id: '${now.microsecondsSinceEpoch}',
         category: sessionInfo.category,
         mode: sessionInfo.mode,
+        difficulty: sessionInfo.difficulty,
         clearTimeMillis: elapsedMillis,
         playedAt: now,
       );
@@ -418,10 +416,7 @@ class PracticeController extends ChangeNotifier {
     if (problem == null) {
       return false;
     }
-    return isCorrectInfoAnswer(
-      problem: problem,
-      input: _inputBuffer,
-    );
+    return isCorrectInfoAnswer(problem: problem, input: _inputBuffer);
   }
 
   @override

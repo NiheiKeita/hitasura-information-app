@@ -153,6 +153,16 @@
   "menuLicensesDesc": "Libraries used",
   "menuOpenLinkError": "Couldn't open the link",
 
+  "rankingSelfTitle": "Your Ranking",
+  "rankingWorldButton": "World Ranking",
+  "rankingRangeToday": "Today",
+  "rankingRangeThisWeek": "This week",
+  "rankingRangeAll": "All",
+  "rankingNoRecords": "No records yet",
+  "rankingRank": "#{rank}",
+  "@rankingRank": {
+    "placeholders": {"rank": {"type": "int"}}
+  },
   "rankingComingSoon": "Ranking is coming soon",
 
   "introPointsTitle": "Key points",

@@ -110,6 +110,13 @@
   "menuLicensesDesc": "使用しているライブラリ",
   "menuOpenLinkError": "リンクを開けませんでした",
 
+  "rankingSelfTitle": "自分ランキング",
+  "rankingWorldButton": "世界ランキング",
+  "rankingRangeToday": "今日",
+  "rankingRangeThisWeek": "今週",
+  "rankingRangeAll": "全体",
+  "rankingNoRecords": "まだ記録がありません",
+  "rankingRank": "{rank}位",
   "rankingComingSoon": "ランキング機能は近日公開予定です",
 
   "introPointsTitle": "ポイント",
