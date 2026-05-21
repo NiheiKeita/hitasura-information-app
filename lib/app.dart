@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'core/ads/ad_config.dart';
@@ -98,6 +99,7 @@ class App extends StatelessWidget {
 
   static Future<App> bootstrap() async {
     WidgetsFlutterBinding.ensureInitialized();
+    await dotenv.load(fileName: '.env', isOptional: true);
     final prefs = await SharedPreferences.getInstance();
     final adService = _buildAdService();
     await adService.init();
