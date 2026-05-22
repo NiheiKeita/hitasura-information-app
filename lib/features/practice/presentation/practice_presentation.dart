@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../domain/answer_input.dart';
+import '../domain/countdown_phase.dart';
 import '../domain/enums.dart';
 import 'widgets/answer_fields.dart';
 import 'widgets/answer_keypad.dart';
@@ -21,7 +23,7 @@ class PracticePresentation extends StatefulWidget {
     required this.progressText,
     required this.elapsedText,
     required this.feedback,
-    required this.countdownText,
+    required this.countdownPhase,
     required this.canSubmit,
     required this.onDigit,
     required this.onBackspace,
@@ -37,7 +39,7 @@ class PracticePresentation extends StatefulWidget {
   final String progressText;
   final String elapsedText;
   final AnswerFeedback? feedback;
-  final String? countdownText;
+  final CountdownPhase? countdownPhase;
   final bool canSubmit;
   final void Function(int digit) onDigit;
   final VoidCallback onBackspace;
@@ -92,11 +94,12 @@ class _PracticePresentationState extends State<PracticePresentation>
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
         title: Text(
-          _title(widget.sessionInfo.category),
+          widget.sessionInfo.category.label(l10n),
           style: const TextStyle(
             color: _cMain,
             fontWeight: FontWeight.w800,
@@ -160,9 +163,9 @@ class _PracticePresentationState extends State<PracticePresentation>
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            const Text(
-                              '問題',
-                              style: TextStyle(
+                            Text(
+                              l10n.practiceQuestion,
+                              style: const TextStyle(
                                 color: _cGrayText,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -185,7 +188,7 @@ class _PracticePresentationState extends State<PracticePresentation>
                       ),
                       const SizedBox(height: 12),
                       Text(
-                        '答え',
+                        l10n.practiceAnswer,
                         style: const TextStyle(
                           color: _cMain,
                           fontWeight: FontWeight.w800,
@@ -220,9 +223,9 @@ class _PracticePresentationState extends State<PracticePresentation>
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        '下のキーパッドで入力',
-                        style: TextStyle(color: _cGrayText),
+                      Text(
+                        l10n.practiceInputHint,
+                        style: const TextStyle(color: _cGrayText),
                       ),
                     ],
                   ),
@@ -241,26 +244,11 @@ class _PracticePresentationState extends State<PracticePresentation>
           ),
           if (widget.feedback != null)
             _FeedbackOverlay(feedback: widget.feedback!),
-          if (widget.countdownText != null)
-            _CountdownOverlay(text: widget.countdownText!),
+          if (widget.countdownPhase != null)
+            _CountdownOverlay(phase: widget.countdownPhase!),
         ],
       ),
     );
-  }
-
-  String _title(Category category) {
-    switch (category) {
-      case Category.pseudocodeExecution:
-        return '疑似コードの実行結果';
-      case Category.controlFlowTrace:
-        return 'if / for / while の処理追跡';
-      case Category.binaryToDecimal:
-        return '2進数→10進数';
-      case Category.decimalToBinary:
-        return '10進数→2進数';
-      case Category.binaryMixed:
-        return '2進数/10進数ミックス';
-    }
   }
 
   double _questionFontSize(String text) {
@@ -353,13 +341,18 @@ class _FeedbackOverlay extends StatelessWidget {
 }
 
 class _CountdownOverlay extends StatelessWidget {
-  const _CountdownOverlay({required this.text});
+  const _CountdownOverlay({required this.phase});
 
-  final String text;
+  final CountdownPhase phase;
 
   @override
   Widget build(BuildContext context) {
-    final asset = _assetForText(text);
+    final isReady = phase == CountdownPhase.ready;
+    final assetPath =
+        isReady ? 'assets/images/ready.png' : 'assets/images/go.png';
+    final fallbackText = isReady
+        ? context.l10n.practiceCountdownReady
+        : context.l10n.practiceCountdownStart;
     return Positioned.fill(
       child: IgnorePointer(
         child: Container(
@@ -368,19 +361,24 @@ class _CountdownOverlay extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) {
               final maxSide =
-                  constraints.biggest.shortestSide * (asset.isReady ? 0.75 : 0.8);
+                  constraints.biggest.shortestSide * (isReady ? 0.75 : 0.8);
               return SizedBox(
                 width: maxSide,
                 height: maxSide,
-                child: asset.path != null
-                    ? Image.asset(asset.path!, fit: BoxFit.contain)
-                    : Text(
-                        text,
-                        style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                      ),
+                child: Image.asset(
+                  assetPath,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, _, __) => Center(
+                    child: Text(
+                      fallbackText,
+                      style:
+                          Theme.of(context).textTheme.displaySmall?.copyWith(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                    ),
+                  ),
+                ),
               );
             },
           ),
@@ -388,29 +386,6 @@ class _CountdownOverlay extends StatelessWidget {
       ),
     );
   }
-
-  _CountdownAsset _assetForText(String text) {
-    if (text == 'よーい') {
-      return const _CountdownAsset(
-        path: 'assets/images/ready.png',
-        isReady: true,
-      );
-    }
-    if (text == 'スタート！') {
-      return const _CountdownAsset(
-        path: 'assets/images/go.png',
-        isReady: false,
-      );
-    }
-    return const _CountdownAsset(path: null, isReady: false);
-  }
-}
-
-class _CountdownAsset {
-  const _CountdownAsset({required this.path, required this.isReady});
-
-  final String? path;
-  final bool isReady;
 }
 
 class _SoftCard extends StatelessWidget {

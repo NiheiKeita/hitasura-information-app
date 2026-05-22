@@ -1,9 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/features/practice/domain/enums.dart';
 import 'package:flutter_example_app/features/practice/domain/problem.dart';
 import 'package:flutter_example_app/features/result/presentation/result_presentation.dart';
+
+import '../../../helpers/localized_test_app.dart';
 
 void main() {
   testWidgets('ResultPresentation calls callbacks', (tester) async {
@@ -20,7 +21,7 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: ResultPresentation(
           result: result,
           onRetry: () => retried = true,

@@ -7,6 +7,8 @@ class StatsSummary {
     required this.last7DaysCorrect,
     required this.totalsAnswered,
     required this.totalsCorrect,
+    required this.currentStreak,
+    required this.bestStreak,
     required this.bestRecords,
   });
 
@@ -15,6 +17,8 @@ class StatsSummary {
   final int last7DaysCorrect;
   final int totalsAnswered;
   final int totalsCorrect;
+  final int currentStreak;
+  final int bestStreak;
   final List<BestRecordEntry> bestRecords;
 }
 

@@ -51,6 +51,12 @@ class StatsRepositoryPrefs implements StatsRepository {
       final totalsCorrect = (_prefs.getInt(PrefsKeys.totalsCorrect) ?? 0) + 1;
       await _prefs.setInt(PrefsKeys.totalsCorrect, totalsCorrect);
     }
+
+    final currentStreak = await _calculateCurrentStreak(date);
+    final storedBestStreak = _prefs.getInt(PrefsKeys.bestStreak) ?? 0;
+    if (currentStreak > storedBestStreak) {
+      await _prefs.setInt(PrefsKeys.bestStreak, currentStreak);
+    }
   }
 
   @override
@@ -137,6 +143,11 @@ class StatsRepositoryPrefs implements StatsRepository {
     final totalsAnswered =
         _prefs.getInt(PrefsKeys.totalsAnswered) ?? totalsCorrect;
 
+    final currentStreak = await _calculateCurrentStreak(now);
+    final storedBestStreak = _prefs.getInt(PrefsKeys.bestStreak) ?? 0;
+    final bestStreak =
+        currentStreak > storedBestStreak ? currentStreak : storedBestStreak;
+
     final bestRecords = <BestRecordEntry>[];
     for (final category in Category.values) {
       for (final mode in PracticeMode.values) {
@@ -164,8 +175,34 @@ class StatsRepositoryPrefs implements StatsRepository {
       last7DaysCorrect: last7Days,
       totalsAnswered: totalsAnswered,
       totalsCorrect: totalsCorrect,
+      currentStreak: currentStreak,
+      bestStreak: bestStreak,
       bestRecords: bestRecords,
     );
+  }
+
+  Future<int> _calculateCurrentStreak(DateTime now) async {
+    final today = DateTime(now.year, now.month, now.day);
+    var startOffset = 0;
+    if (!await _isActiveDay(today)) {
+      startOffset = 1;
+    }
+
+    var streak = 0;
+    for (var i = startOffset; i < 365; i++) {
+      final date = today.subtract(Duration(days: i));
+      if (await _isActiveDay(date)) {
+        streak += 1;
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  Future<bool> _isActiveDay(DateTime date) async {
+    final stats = await loadDailyStats(date: date);
+    return stats != null && stats.answered > 0;
   }
 
   @override

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../../practice/domain/enums.dart';
-import '../../practice/domain/problem.dart';
+import '../../../core/l10n/l10n.dart';
 import '../../../widgets/pressable_surface.dart';
 import '../../../widgets/wavy_background.dart';
+import '../../practice/domain/enums.dart';
+import '../../practice/domain/problem.dart';
+import '../../records/domain/record_comparison.dart';
 
 const _cBg = Color(0xFFFFFFFF);
 const _cMain = Color(0xFF0284C7);
@@ -27,13 +29,15 @@ class ResultPresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final totalSeconds = (result.elapsedMillis / 1000).toStringAsFixed(1);
+    final comparison = result.recordComparison;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          '結果',
-          style: TextStyle(
+        title: Text(
+          l10n.resultTitle,
+          style: const TextStyle(
             color: _cMain,
             fontWeight: FontWeight.w800,
           ),
@@ -57,7 +61,7 @@ class ResultPresentation extends StatelessWidget {
             ),
             children: [
               Text(
-                _title(result.category),
+                result.category.label(l10n),
                 style: const TextStyle(
                   color: _cMain,
                   fontWeight: FontWeight.w800,
@@ -65,9 +69,9 @@ class ResultPresentation extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              const Text(
-                'おつかれさま！',
-                style: TextStyle(color: _cGrayText),
+              Text(
+                l10n.resultMessage,
+                style: const TextStyle(color: _cGrayText),
               ),
               const SizedBox(height: 20),
               _SoftCard(
@@ -75,33 +79,40 @@ class ResultPresentation extends StatelessWidget {
                   children: [
                     if (result.mode == PracticeMode.infinite) ...[
                       _ResultHero(
-                        label: '正解数',
+                        label: l10n.resultCorrectCount,
                         value: '${result.correctCount}',
                       ),
                       const SizedBox(height: 12),
                       _ResultRow(
-                        label: '最大連続正解',
+                        label: l10n.resultMaxStreak,
                         value: '${result.maxStreak}',
                       ),
-                      _ResultRow(label: '所要時間', value: '${totalSeconds}s'),
+                      _ResultRow(
+                        label: l10n.resultElapsedTime,
+                        value: l10n.resultSecondsShort(totalSeconds),
+                      ),
                     ] else ...[
                       _ResultHero(
-                        label: '合計タイム',
-                        value: '${totalSeconds}s',
+                        label: l10n.resultTotalTime,
+                        value: l10n.resultSecondsShort(totalSeconds),
                       ),
                       const SizedBox(height: 12),
                       _ResultRow(
-                        label: '正解数',
+                        label: l10n.resultCorrectCount,
                         value: '${result.correctCount}',
                       ),
                       _ResultRow(
-                        label: '平均回答時間',
-                        value: _averageTime(result),
+                        label: l10n.resultAverageTime,
+                        value: _averageTime(context, result),
                       ),
                     ],
                   ],
                 ),
               ),
+              if (comparison != null) ...[
+                const SizedBox(height: 16),
+                _SelfBestCard(comparison: comparison),
+              ],
               const SizedBox(height: 24),
               Row(
                 children: [
@@ -122,12 +133,12 @@ class ResultPresentation extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         child: Center(
                           child: Text(
-                            'Homeへ',
-                            style: TextStyle(
+                            l10n.resultHomeButton,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               color: _cMain,
                             ),
@@ -153,12 +164,12 @@ class ResultPresentation extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Padding(
-                        padding: EdgeInsets.symmetric(vertical: 14),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 14),
                         child: Center(
                           child: Text(
-                            'もう一回',
-                            style: TextStyle(
+                            l10n.resultRetryButton,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               color: Colors.white,
                             ),
@@ -187,28 +198,126 @@ class ResultPresentation extends StatelessWidget {
     );
   }
 
-  String _averageTime(PracticeResult result) {
+  String _averageTime(BuildContext context, PracticeResult result) {
     if (result.answeredCount == 0) {
       return '-';
     }
     final averageMillis = result.elapsedMillis / result.answeredCount;
-    return '${(averageMillis / 1000).toStringAsFixed(1)}s';
+    return context.l10n
+        .resultSecondsShort((averageMillis / 1000).toStringAsFixed(1));
+  }
+}
+
+class _SelfBestCard extends StatelessWidget {
+  const _SelfBestCard({required this.comparison});
+
+  final RecordComparison comparison;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final celebrate = comparison.isAllTimeBest
+        ? l10n.resultAllTimeBestUpdated
+        : (comparison.isTodayBest ? l10n.resultTodayBestUpdated : null);
+    final celebrateColor =
+        comparison.isAllTimeBest ? _cAccent : _cMain.withValues(alpha: 0.85);
+
+    String fmt(int millis) =>
+        l10n.resultSecondsShort((millis / 1000).toStringAsFixed(1));
+
+    return _SoftCard(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (celebrate != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: celebrateColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(color: celebrateColor),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    comparison.isAllTimeBest ? Icons.star : Icons.flash_on,
+                    color: celebrateColor,
+                    size: 16,
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    celebrate,
+                    style: TextStyle(
+                      color: celebrateColor,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 14),
+          ],
+          Text(
+            l10n.resultSelfBestTitle,
+            style: const TextStyle(
+              color: _cMain,
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+          const SizedBox(height: 10),
+          _ResultRow(
+            label: l10n.resultBestToday,
+            value: fmt(comparison.displayedTodayBestMillis),
+          ),
+          _ResultRow(
+            label: l10n.resultBestThisWeek,
+            value: fmt(comparison.displayedWeekBestMillis),
+          ),
+          _ResultRow(
+            label: l10n.resultBestAllTime,
+            value: fmt(comparison.displayedAllTimeBestMillis),
+          ),
+          const SizedBox(height: 8),
+          _GapMessage(comparison: comparison),
+        ],
+      ),
+    );
+  }
+}
+
+class _GapMessage extends StatelessWidget {
+  const _GapMessage({required this.comparison});
+
+  final RecordComparison comparison;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    String message;
+    if (comparison.isAllTimeBest) {
+      message = l10n.resultEncourageAllTimeBest;
+    } else {
+      final allTimeGap = comparison.gapToAllTimeBestMillis;
+      final todayGap = comparison.gapToTodayBestMillis;
+      if (allTimeGap != null && allTimeGap > 0) {
+        message = l10n.resultEncourageGapAllTime(_seconds(allTimeGap));
+      } else if (todayGap != null && todayGap > 0) {
+        message = l10n.resultEncourageGapToday(_seconds(todayGap));
+      } else {
+        message = l10n.resultEncourageKeepGoing;
+      }
+    }
+    return Text(
+      message,
+      style: TextStyle(
+        color: _cMain.withValues(alpha: 0.75),
+        fontWeight: FontWeight.w600,
+      ),
+    );
   }
 
-  String _title(Category category) {
-    switch (category) {
-      case Category.pseudocodeExecution:
-        return '疑似コードの実行結果';
-      case Category.controlFlowTrace:
-        return 'if / for / while の処理追跡';
-      case Category.binaryToDecimal:
-        return '2進数→10進数';
-      case Category.decimalToBinary:
-        return '10進数→2進数';
-      case Category.binaryMixed:
-        return '2進数/10進数ミックス';
-    }
-  }
+  String _seconds(int millis) => (millis / 1000).toStringAsFixed(1);
 }
 
 class _ResultRow extends StatelessWidget {

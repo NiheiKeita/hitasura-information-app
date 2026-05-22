@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../../widgets/pressable_surface.dart';
 import '../../../widgets/wavy_background.dart';
 
@@ -29,12 +30,13 @@ class MenuPresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          'メニュー',
-          style: TextStyle(color: _cMain, fontWeight: FontWeight.w800),
+        title: Text(
+          l10n.menuTitle,
+          style: const TextStyle(color: _cMain, fontWeight: FontWeight.w800),
         ),
         backgroundColor: _cBg,
         elevation: 0,
@@ -48,9 +50,9 @@ class MenuPresentation extends StatelessWidget {
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             children: [
-              const Text(
-                'はじめに',
-                style: TextStyle(
+              Text(
+                l10n.menuGetStarted,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: _cMain,
@@ -60,40 +62,40 @@ class MenuPresentation extends StatelessWidget {
               Column(
                 children: [
                   _MenuButton(
-                    label: '疑似コードの実行結果',
-                    description: '変数と出力を追う',
+                    label: l10n.categoryPseudocodeExecution,
+                    description: l10n.menuPseudocodeDesc,
                     onTap: onOpenPseudocodeIntro,
                   ),
                   const SizedBox(height: 10),
                   _MenuButton(
-                    label: 'if / for / while の処理追跡',
-                    description: '分岐とループの流れ',
+                    label: l10n.categoryControlFlowTrace,
+                    description: l10n.menuControlFlowDesc,
                     onTap: onOpenControlFlowIntro,
                   ),
                   const SizedBox(height: 10),
                   _MenuButton(
-                    label: '2進数→10進数',
-                    description: '2進数を10進数へ',
+                    label: l10n.categoryBinaryToDecimal,
+                    description: l10n.menuBinaryToDecimalDesc,
                     onTap: onOpenBinaryToDecimalIntro,
                   ),
                   const SizedBox(height: 10),
                   _MenuButton(
-                    label: '10進数→2進数',
-                    description: '10進数を2進数へ',
+                    label: l10n.categoryDecimalToBinary,
+                    description: l10n.menuDecimalToBinaryDesc,
                     onTap: onOpenDecimalToBinaryIntro,
                   ),
                   const SizedBox(height: 10),
                   _MenuButton(
-                    label: '2進数/10進数ミックス',
-                    description: 'ランダム出題',
+                    label: l10n.categoryBinaryMixed,
+                    description: l10n.menuBinaryMixedDesc,
                     onTap: onOpenBinaryMixedIntro,
                   ),
                 ],
               ),
               const SizedBox(height: 20),
-              const Text(
-                'リンク',
-                style: TextStyle(
+              Text(
+                l10n.menuLinks,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: _cMain,
@@ -103,8 +105,8 @@ class MenuPresentation extends StatelessWidget {
               Column(
                 children: [
                   _MenuButton(
-                    label: '公式WEBサイト',
-                    description: '最新情報はこちら',
+                    label: l10n.menuOfficialWebsite,
+                    description: l10n.menuOfficialWebsiteDesc,
                     onTap: () => _launchUri(
                       context,
                       Uri.parse('https://hitasura-info.qboad.com/'),
@@ -112,8 +114,8 @@ class MenuPresentation extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   _MenuButton(
-                    label: '他のアプリ一覧',
-                    description: 'シリーズをチェック',
+                    label: l10n.menuOtherApps,
+                    description: l10n.menuOtherAppsDesc,
                     onTap: () => _launchUri(
                       context,
                       Uri.parse('https://keitamax.qboad.com/apps/'),
@@ -122,9 +124,9 @@ class MenuPresentation extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 20),
-              const Text(
-                'このアプリについて',
-                style: TextStyle(
+              Text(
+                l10n.menuAbout,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   color: _cMain,
@@ -132,8 +134,8 @@ class MenuPresentation extends StatelessWidget {
               ),
               const SizedBox(height: 10),
               _MenuButton(
-                label: 'ライセンス',
-                description: '使用しているライブラリ',
+                label: l10n.menuLicenses,
+                description: l10n.menuLicensesDesc,
                 onTap: onOpenLicenses,
               ),
             ],
@@ -151,7 +153,7 @@ Future<void> _launchUri(BuildContext context, Uri uri) async {
   }
   ScaffoldMessenger.of(
     context,
-  ).showSnackBar(const SnackBar(content: Text('リンクを開けませんでした')));
+  ).showSnackBar(SnackBar(content: Text(context.l10n.menuOpenLinkError)));
 }
 
 class _MenuButton extends StatelessWidget {

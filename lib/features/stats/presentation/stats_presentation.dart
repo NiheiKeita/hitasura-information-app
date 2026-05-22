@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../../core/storage/stats_repository.dart';
 import '../../practice/domain/enums.dart';
 import '../../../widgets/pressable_surface.dart';
@@ -27,12 +28,13 @@ class StatsPresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          'Stats',
-          style: TextStyle(
+        title: Text(
+          l10n.tabStats,
+          style: const TextStyle(
             color: _cMain,
             fontWeight: FontWeight.w800,
           ),
@@ -77,38 +79,38 @@ class StatsPresentation extends StatelessWidget {
           ListView(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
             children: [
-              _sectionTitle(context, '今日の記録'),
+              _sectionTitle(context, l10n.statsTodayTitle),
               _HeroStatCard(
-                label: '今日の正解数',
+                label: l10n.statsTodayCorrect,
                 value: summary.todayCorrect.toString(),
               ),
               const SizedBox(height: 20),
-              _sectionTitle(context, '直近7日合計'),
+              _sectionTitle(context, l10n.statsLast7DaysTitle),
               _BigStatCard(
-                label: '7日間の正解数',
+                label: l10n.statsLast7DaysCorrect,
                 value: summary.last7DaysCorrect.toString(),
               ),
               const SizedBox(height: 20),
-              _sectionTitle(context, '総計'),
+              _sectionTitle(context, l10n.statsTotalTitle),
               _SoftCard(
                 child: Column(
                   children: [
                     _StatRow(
-                      label: '総正解数',
+                      label: l10n.statsTotalCorrect,
                       value: '${summary.totalsCorrect}',
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: 20),
-              _sectionTitle(context, '学習カレンダー'),
+              _sectionTitle(context, l10n.statsCalendarTitle),
               _SoftCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '直近のペース',
-                      style: TextStyle(
+                    Text(
+                      l10n.statsRecentPace,
+                      style: const TextStyle(
                         color: _cGrayText,
                         fontWeight: FontWeight.w600,
                       ),
@@ -137,10 +139,10 @@ class StatsPresentation extends StatelessWidget {
                             ),
                           ],
                         ),
-                        child: const Center(
+                        child: Center(
                           child: Text(
-                            'カレンダーを見る',
-                            style: TextStyle(
+                            l10n.statsOpenCalendar,
+                            style: const TextStyle(
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
@@ -152,7 +154,7 @@ class StatsPresentation extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              _sectionTitle(context, 'ベスト記録'),
+              _sectionTitle(context, l10n.statsBestRecords),
               _BestRecordsGrid(records: summary.bestRecords),
             ],
           ),
@@ -335,12 +337,13 @@ class _BestCategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return _SoftCard(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _categoryLabel(category),
+            category.label(l10n),
             style: const TextStyle(
               color: _cMain,
               fontWeight: FontWeight.w800,
@@ -358,21 +361,6 @@ class _BestCategorySection extends StatelessWidget {
       ),
     );
   }
-
-  String _categoryLabel(Category category) {
-    switch (category) {
-      case Category.pseudocodeExecution:
-        return '疑似コードの実行結果';
-      case Category.controlFlowTrace:
-        return 'if / for / while の処理追跡';
-      case Category.binaryToDecimal:
-        return '2進数→10進数';
-      case Category.decimalToBinary:
-        return '10進数→2進数';
-      case Category.binaryMixed:
-        return '2進数/10進数ミックス';
-    }
-  }
 }
 
 class _BestChip extends StatelessWidget {
@@ -383,8 +371,9 @@ class _BestChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final label = '${_mode(record.mode)} / ${_difficulty(record.difficulty)}';
-    final value = _formatRecord(record);
+    final l10n = context.l10n;
+    final label = '${record.mode.label(l10n)} / ${_difficulty(record.difficulty)}';
+    final value = _formatRecord(context, record);
     return Container(
       constraints: const BoxConstraints(minWidth: 140),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
@@ -415,29 +404,21 @@ class _BestChip extends StatelessWidget {
     );
   }
 
-  String _formatRecord(BestRecordEntry entry) {
+  String _formatRecord(BuildContext context, BestRecordEntry entry) {
+    final l10n = context.l10n;
     if (entry.mode == PracticeMode.timeAttack10) {
       final best = entry.record.bestTimeMillis;
       if (best == null || best == 0) {
-        return '最短 -';
+        return l10n.statsBestTimeNone;
       }
-      return '最短 ${(best / 1000).toStringAsFixed(1)}s';
+      return l10n.statsBestTime((best / 1000).toStringAsFixed(1));
     }
     final correct = entry.record.bestCorrectCount;
     final streak = entry.record.bestMaxStreak;
     if (correct == null || correct == 0) {
-      return '正解 -';
+      return l10n.statsBestScoreNone;
     }
-    return '正解 $correct / 連続 ${streak ?? 0}';
-  }
-
-  String _mode(PracticeMode mode) {
-    switch (mode) {
-      case PracticeMode.infinite:
-        return '無限';
-      case PracticeMode.timeAttack10:
-        return '10問TA';
-    }
+    return l10n.statsBestScore(correct, streak ?? 0);
   }
 
   String _difficulty(Difficulty difficulty) {

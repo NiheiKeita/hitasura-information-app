@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/core/ads/noop_ad_service.dart';
@@ -9,7 +8,11 @@ import 'package:flutter_example_app/features/practice/domain/enums.dart';
 import 'package:flutter_example_app/features/practice/domain/generators/problem_generator.dart';
 import 'package:flutter_example_app/features/practice/domain/problem.dart';
 import 'package:flutter_example_app/features/practice/presentation/widgets/answer_keypad.dart';
+import 'package:flutter_example_app/features/records/data/record_repository.dart';
+import 'package:flutter_example_app/features/records/domain/practice_record.dart';
 import 'package:flutter_example_app/widgets/pressable_surface.dart';
+
+import '../../../helpers/localized_test_app.dart';
 
 class FakeClock implements Clock {
   FakeClock(this._now);
@@ -53,6 +56,8 @@ class FakeStatsRepository implements StatsRepository {
       last7DaysCorrect: 0,
       totalsAnswered: 0,
       totalsCorrect: 0,
+      currentStreak: 0,
+      bestStreak: 0,
       bestRecords: [],
     );
   }
@@ -87,6 +92,44 @@ class FakeStatsRepository implements StatsRepository {
   }
 }
 
+class FakeRecordRepository implements RecordRepository {
+  final List<PracticeRecord> records = [];
+
+  @override
+  Future<void> addRecord(PracticeRecord record) async {
+    records.add(record);
+  }
+
+  @override
+  Future<void> clear({
+    required Category category,
+    required PracticeMode mode,
+  }) async {}
+
+  @override
+  Future<List<PracticeRecord>> loadAllRecordsForMode({
+    required PracticeMode mode,
+  }) async {
+    return records.where((r) => r.mode == mode).toList();
+  }
+
+  @override
+  Future<List<PracticeRecord>> loadRecords({
+    required Category category,
+    required PracticeMode mode,
+    required Difficulty difficulty,
+  }) async {
+    return records
+        .where(
+          (r) =>
+              r.category == category &&
+              r.mode == mode &&
+              r.difficulty == difficulty,
+        )
+        .toList();
+  }
+}
+
 class FakeInfoProblemGenerator implements InfoProblemGenerator {
   FakeInfoProblemGenerator(this.problem);
   final InfoProblem problem;
@@ -114,13 +157,14 @@ void main() {
     );
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: PracticeContainer(
           category: Category.pseudocodeExecution,
           mode: PracticeMode.infinite,
           difficulty: Difficulty.easy,
           infoProblemGenerator: generator,
           statsRepository: statsRepository,
+          recordRepository: FakeRecordRepository(),
           clock: FakeClock(DateTime(2024, 1, 1)),
           adService: NoopAdService(),
           onFinish: (_) {},
@@ -168,13 +212,14 @@ void main() {
     var finished = false;
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: PracticeContainer(
           category: Category.controlFlowTrace,
           mode: PracticeMode.timeAttack10,
           difficulty: Difficulty.easy,
           infoProblemGenerator: generator,
           statsRepository: statsRepository,
+          recordRepository: FakeRecordRepository(),
           clock: FakeClock(DateTime(2024, 1, 1)),
           adService: NoopAdService(),
           onFinish: (_) {
@@ -202,8 +247,7 @@ void main() {
     expect(statsRepository.recordBestCalls, 1);
   });
 
-  testWidgets('Manual finish in time attack skips best record',
-      (tester) async {
+  testWidgets('Manual finish in time attack skips best record', (tester) async {
     final statsRepository = FakeStatsRepository();
     final generator = FakeInfoProblemGenerator(
       const InfoProblem(
@@ -217,13 +261,14 @@ void main() {
     var finished = false;
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: PracticeContainer(
           category: Category.decimalToBinary,
           mode: PracticeMode.timeAttack10,
           difficulty: Difficulty.easy,
           infoProblemGenerator: generator,
           statsRepository: statsRepository,
+          recordRepository: FakeRecordRepository(),
           clock: FakeClock(DateTime(2024, 1, 1)),
           adService: NoopAdService(),
           onFinish: (_) {

@@ -1,0 +1,184 @@
+{
+  "@@locale": "en",
+  "appTitle": "Hitasura Jouhou",
+  "@appTitle": {"description": "App display title"},
+
+  "homeMenuTooltip": "Menu",
+  "homeTagline": "Don't think. Just get used to it.",
+  "homeTodayCorrect": "Correct today: {count}",
+  "@homeTodayCorrect": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "homeStreakDays": "{count}-day streak!",
+  "@homeStreakDays": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "homeChooseCategory": "Choose a topic",
+
+  "categoryPseudocodeExecution": "Pseudocode Execution",
+  "categoryPseudocodeExecutionDesc": "Trace variable values and output",
+  "categoryControlFlowTrace": "if / for / while Trace",
+  "categoryControlFlowTraceDesc": "Read branches and loops",
+  "categoryBinaryToDecimal": "Binary → Decimal",
+  "categoryBinaryToDecimalDesc": "Convert binary to decimal",
+  "categoryDecimalToBinary": "Decimal → Binary",
+  "categoryDecimalToBinaryDesc": "Convert decimal to binary",
+  "categoryBinaryMixed": "Binary / Decimal Mix",
+  "categoryBinaryMixedDesc": "Conversion direction is randomized",
+
+  "modeSelectTitle": "Select Mode",
+  "modeSelectSubtitle": "Choose a mode and difficulty",
+  "modeSelectModeLabel": "Mode",
+  "modePracticeMode10": "TA 10",
+  "modePracticeMode10Desc": "Tempo focused",
+  "modePracticeModeInfinite": "Infinite",
+  "modePracticeModeInfiniteDesc": "Solve continuously",
+  "modeDifficultyLabel": "Difficulty",
+  "modeSelectStart": "Start",
+
+  "practiceQuestion": "Question",
+  "practiceAnswer": "Answer",
+  "practiceInputHint": "Enter with the keypad below",
+  "practiceProgressInfinite": "Correct: {correct} (streak {streak})",
+  "@practiceProgressInfinite": {
+    "placeholders": {
+      "correct": {"type": "int"},
+      "streak": {"type": "int"}
+    }
+  },
+  "practiceInputPlaceholder": "Input",
+  "practiceCountdownReady": "Ready",
+  "practiceCountdownStart": "Start!",
+  "practiceClear": "Clear",
+  "practiceSubmit": "Submit",
+
+  "hintAnswerDecimal": "Answer in decimal",
+  "hintAnswerBinary": "Answer in binary",
+
+  "resultTitle": "Result",
+  "resultMessage": "Nice work!",
+  "resultCorrectCount": "Correct",
+  "resultMaxStreak": "Best streak",
+  "resultElapsedTime": "Elapsed",
+  "resultTotalTime": "Total time",
+  "resultAverageTime": "Avg. answer time",
+  "resultHomeButton": "Home",
+  "resultRetryButton": "Retry",
+  "resultSecondsShort": "{seconds}s",
+  "@resultSecondsShort": {
+    "placeholders": {"seconds": {"type": "String"}}
+  },
+  "resultSelfBestTitle": "Your bests",
+  "resultBestToday": "Today's best",
+  "resultBestThisWeek": "This week's best",
+  "resultBestAllTime": "All-time best",
+  "resultAllTimeBestUpdated": "All-time best updated!",
+  "resultTodayBestUpdated": "Today's best updated!",
+  "resultEncourageAllTimeBest": "Amazing — your new personal best!",
+  "resultEncourageGapAllTime": "{seconds}s away from your all-time best.",
+  "@resultEncourageGapAllTime": {
+    "placeholders": {"seconds": {"type": "String"}}
+  },
+  "resultEncourageGapToday": "{seconds}s away from today's best.",
+  "@resultEncourageGapToday": {
+    "placeholders": {"seconds": {"type": "String"}}
+  },
+  "resultEncourageKeepGoing": "Keep going!",
+
+  "calendarTitle": "Study Calendar",
+  "calendarMonthFormat": "{year} / {month}",
+  "@calendarMonthFormat": {
+    "placeholders": {
+      "year": {"type": "int"},
+      "month": {"type": "int"}
+    }
+  },
+  "calendarNoStudy": "No activity on this day yet",
+  "calendarCorrectCount": "Correct",
+  "calendarBreakdown": "Breakdown",
+  "calendarQuestionCount": "{count} q",
+  "@calendarQuestionCount": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "calendarCountQuestions": "{count} q",
+  "@calendarCountQuestions": {
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "weekdaySun": "Sun",
+  "weekdayMon": "Mon",
+  "weekdayTue": "Tue",
+  "weekdayWed": "Wed",
+  "weekdayThu": "Thu",
+  "weekdayFri": "Fri",
+  "weekdaySat": "Sat",
+
+  "statsTodayTitle": "Today",
+  "statsTodayCorrect": "Correct today",
+  "statsLast7DaysTitle": "Last 7 days",
+  "statsLast7DaysCorrect": "Correct in 7 days",
+  "statsTotalTitle": "Total",
+  "statsTotalCorrect": "Total correct",
+  "statsCalendarTitle": "Study Calendar",
+  "statsRecentPace": "Recent pace",
+  "statsOpenCalendar": "Open calendar",
+  "statsBestRecords": "Best records",
+  "statsBestTimeNone": "Best -",
+  "statsBestTime": "Best {seconds}s",
+  "@statsBestTime": {
+    "placeholders": {"seconds": {"type": "String"}}
+  },
+  "statsBestScoreNone": "Correct -",
+  "statsBestScore": "Correct {correct} / streak {streak}",
+  "@statsBestScore": {
+    "placeholders": {
+      "correct": {"type": "int"},
+      "streak": {"type": "int"}
+    }
+  },
+
+  "menuTitle": "Menu",
+  "menuGetStarted": "Get started",
+  "menuPseudocodeDesc": "Trace variables and output",
+  "menuControlFlowDesc": "Branches and loops",
+  "menuBinaryToDecimalDesc": "Binary to decimal",
+  "menuDecimalToBinaryDesc": "Decimal to binary",
+  "menuBinaryMixedDesc": "Random conversion",
+  "menuLinks": "Links",
+  "menuOfficialWebsite": "Official website",
+  "menuOfficialWebsiteDesc": "Latest updates here",
+  "menuOtherApps": "Other apps",
+  "menuOtherAppsDesc": "Check the series",
+  "menuAbout": "About this app",
+  "menuLicenses": "Licenses",
+  "menuLicensesDesc": "Libraries used",
+  "menuOpenLinkError": "Couldn't open the link",
+
+  "rankingSelfTitle": "Your Ranking",
+  "rankingWorldButton": "World Ranking",
+  "rankingRangeToday": "Today",
+  "rankingRangeThisWeek": "This week",
+  "rankingRangeAll": "All",
+  "rankingNoRecords": "No records yet",
+  "rankingRank": "#{rank}",
+  "@rankingRank": {
+    "placeholders": {"rank": {"type": "int"}}
+  },
+  "rankingComingSoon": "Ranking is coming soon",
+
+  "introPointsTitle": "Key points",
+  "introSolutionTitle": "How to solve",
+  "introPseudocodePoints": "Track how each variable changes step by step.",
+  "introPseudocodeSolution": "Execute the pseudocode from top to bottom and enter the final output or value.",
+  "introControlFlowPoints": "Sort out condition truthiness and loop counts.",
+  "introControlFlowSolution": "Answer the branch result, loop count, or final output as a number.",
+  "introBinaryToDecimalPoints": "Sum the weight of each digit (1, 2, 4, 8...).",
+  "introBinaryToDecimalSolution": "Enter the binary number as a decimal.",
+  "introDecimalToBinaryPoints": "List the remainders of dividing by 2 in reverse.",
+  "introDecimalToBinarySolution": "Enter the decimal number as binary.",
+  "introBinaryMixedPoints": "Check the conversion direction in the question.",
+  "introBinaryMixedSolution": "Enter the answer in the requested format.",
+
+  "tabHome": "Home",
+  "tabStats": "Stats",
+  "tabRanking": "Ranking"
+}

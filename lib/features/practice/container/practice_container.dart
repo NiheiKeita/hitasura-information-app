@@ -4,8 +4,13 @@ import 'package:flutter/material.dart';
 
 import '../../../core/ads/ad_service.dart';
 import '../../../core/clock/clock.dart';
+import '../../../core/l10n/l10n.dart';
 import '../../../core/storage/stats_repository.dart';
+import '../../records/data/record_repository.dart';
+import '../../records/domain/practice_record.dart';
+import '../../records/domain/record_comparison.dart';
 import '../domain/answer_input.dart';
+import '../domain/countdown_phase.dart';
 import '../domain/enums.dart';
 import '../domain/generators/problem_generator.dart';
 import '../domain/problem.dart';
@@ -20,6 +25,7 @@ class PracticeContainer extends StatefulWidget {
     required this.difficulty,
     required this.infoProblemGenerator,
     required this.statsRepository,
+    required this.recordRepository,
     required this.clock,
     required this.adService,
     required this.onFinish,
@@ -31,6 +37,7 @@ class PracticeContainer extends StatefulWidget {
   final Difficulty difficulty;
   final InfoProblemGenerator infoProblemGenerator;
   final StatsRepository statsRepository;
+  final RecordRepository recordRepository;
   final Clock clock;
   final AdService adService;
   final void Function(PracticeResult result) onFinish;
@@ -41,55 +48,67 @@ class PracticeContainer extends StatefulWidget {
 }
 
 class _PracticeContainerState extends State<PracticeContainer> {
-  late final PracticeController _controller;
+  PracticeController? _controller;
 
   @override
-  void initState() {
-    super.initState();
-        _controller = PracticeController(
-          category: widget.category,
-          mode: widget.mode,
-          difficulty: widget.difficulty,
-          infoProblemGenerator: widget.infoProblemGenerator,
-          statsRepository: widget.statsRepository,
-          clock: widget.clock,
-          adService: widget.adService,
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_controller != null) return;
+    final l10n = context.l10n;
+    _controller = PracticeController(
+      category: widget.category,
+      mode: widget.mode,
+      difficulty: widget.difficulty,
+      infoProblemGenerator: widget.infoProblemGenerator,
+      statsRepository: widget.statsRepository,
+      recordRepository: widget.recordRepository,
+      clock: widget.clock,
+      adService: widget.adService,
       onFinish: widget.onFinish,
+      inputPlaceholder: l10n.practiceInputPlaceholder,
+      progressInfiniteBuilder: (correct, streak) =>
+          l10n.practiceProgressInfinite(correct, streak),
     );
-    _controller.start();
+    _controller!.start();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    _controller?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = _controller;
+    if (controller == null) {
+      return const SizedBox.shrink();
+    }
     return AnimatedBuilder(
-      animation: _controller,
+      animation: controller,
       builder: (context, _) {
         return PracticePresentation(
-          sessionInfo: _controller.sessionInfo,
-          questionText: _controller.questionText,
-          progressText: _controller.progressText,
-          elapsedText: _controller.elapsedText,
-          feedback: _controller.feedback,
-          countdownText: _controller.countdownText,
-          canSubmit: _controller.canSubmit,
-          onDigit: _controller.onDigit,
-          onBackspace: _controller.onBackspace,
-          onClear: _controller.onClear,
-          onSubmit: _controller.onSubmit,
-          onFinish: _controller.finishManually,
-          allowedDigits: _controller.allowedDigits,
-          inputState: _controller.inputState,
+          sessionInfo: controller.sessionInfo,
+          questionText: controller.questionText,
+          progressText: controller.progressText,
+          elapsedText: controller.elapsedText,
+          feedback: controller.feedback,
+          countdownPhase: controller.countdownPhase,
+          canSubmit: controller.canSubmit,
+          onDigit: controller.onDigit,
+          onBackspace: controller.onBackspace,
+          onClear: controller.onClear,
+          onSubmit: controller.onSubmit,
+          onFinish: controller.finishManually,
+          allowedDigits: controller.allowedDigits,
+          inputState: controller.inputState,
         );
       },
     );
   }
 }
+
+typedef ProgressInfiniteBuilder = String Function(int correct, int streak);
 
 class PracticeController extends ChangeNotifier {
   PracticeController({
@@ -98,30 +117,39 @@ class PracticeController extends ChangeNotifier {
     required Difficulty difficulty,
     required InfoProblemGenerator infoProblemGenerator,
     required StatsRepository statsRepository,
+    required RecordRepository recordRepository,
     required Clock clock,
     required AdService adService,
     required void Function(PracticeResult result) onFinish,
-  })  : sessionInfo = PracticeSessionInfo(
-          category: category,
-          mode: mode,
-          difficulty: difficulty,
-        ),
-        _infoProblemGenerator = infoProblemGenerator,
-        _statsRepository = statsRepository,
-        _clock = clock,
-        _adService = adService,
-        _onFinish = onFinish;
+    required String inputPlaceholder,
+    required ProgressInfiniteBuilder progressInfiniteBuilder,
+  }) : sessionInfo = PracticeSessionInfo(
+         category: category,
+         mode: mode,
+         difficulty: difficulty,
+       ),
+       _infoProblemGenerator = infoProblemGenerator,
+       _statsRepository = statsRepository,
+       _recordRepository = recordRepository,
+       _clock = clock,
+       _adService = adService,
+       _onFinish = onFinish,
+       _inputPlaceholder = inputPlaceholder,
+       _progressInfiniteBuilder = progressInfiniteBuilder;
 
   final PracticeSessionInfo sessionInfo;
   final InfoProblemGenerator _infoProblemGenerator;
   final StatsRepository _statsRepository;
+  final RecordRepository _recordRepository;
   final Clock _clock;
   final AdService _adService;
   final void Function(PracticeResult result) _onFinish;
+  final String _inputPlaceholder;
+  final ProgressInfiniteBuilder _progressInfiniteBuilder;
 
   InfoProblem? _problem;
   AnswerFeedback? _feedback;
-  String? _countdownText;
+  CountdownPhase? _countdownPhase;
   bool _readyToStart = false;
   bool _disposed = false;
 
@@ -164,7 +192,7 @@ class PracticeController extends ChangeNotifier {
     if (sessionInfo.mode == PracticeMode.timeAttack10) {
       return '$_questionIndex/10';
     }
-    return '正解 $_correctCount (連続 $_currentStreak)';
+    return _progressInfiniteBuilder(_correctCount, _currentStreak);
   }
 
   String get elapsedText {
@@ -174,10 +202,7 @@ class PracticeController extends ChangeNotifier {
   }
 
   AnswerInputState get inputState {
-    return AnswerInputState(
-      text: _inputBuffer,
-      placeholder: '入力',
-    );
+    return AnswerInputState(text: _inputBuffer, placeholder: _inputPlaceholder);
   }
 
   Set<int>? get allowedDigits {
@@ -191,7 +216,7 @@ class PracticeController extends ChangeNotifier {
     return null;
   }
 
-  String? get countdownText => _countdownText;
+  CountdownPhase? get countdownPhase => _countdownPhase;
 
   AnswerFeedback? get feedback => _feedback;
 
@@ -272,13 +297,11 @@ class PracticeController extends ChangeNotifier {
       return;
     }
 
-    if (sessionInfo.mode == PracticeMode.infinite &&
-        _correctCount % 10 == 0) {
+    if (sessionInfo.mode == PracticeMode.infinite && _correctCount % 10 == 0) {
       await _adService.maybeShowInterstitial('infinite_10');
     }
 
-    if (sessionInfo.mode == PracticeMode.timeAttack10 &&
-        _questionIndex >= 10) {
+    if (sessionInfo.mode == PracticeMode.timeAttack10 && _questionIndex >= 10) {
       finish();
       return;
     }
@@ -288,8 +311,56 @@ class PracticeController extends ChangeNotifier {
   }
 
   void finish({bool isManual = false}) {
+    _finishAsync(isManual: isManual);
+  }
+
+  Future<void> _finishAsync({required bool isManual}) async {
     _ticker?.cancel();
     _updateElapsed();
+    final elapsedMillis = _elapsed.inMilliseconds;
+
+    if (!(isManual && sessionInfo.mode == PracticeMode.timeAttack10)) {
+      await _statsRepository.recordBest(
+        category: sessionInfo.category,
+        mode: sessionInfo.mode,
+        difficulty: sessionInfo.difficulty,
+        correctCount: _correctCount,
+        maxStreak: _maxStreak,
+        timeMillis: sessionInfo.mode == PracticeMode.timeAttack10
+            ? elapsedMillis
+            : null,
+      );
+    }
+
+    RecordComparison? comparison;
+    final shouldSaveRecord =
+        !isManual &&
+        sessionInfo.mode == PracticeMode.timeAttack10 &&
+        elapsedMillis > 0;
+    if (shouldSaveRecord) {
+      final now = _clock.now();
+      final previous = await _recordRepository.loadRecords(
+        category: sessionInfo.category,
+        mode: sessionInfo.mode,
+        difficulty: sessionInfo.difficulty,
+      );
+      comparison = RecordComparison.build(
+        mode: sessionInfo.mode,
+        currentTimeMillis: elapsedMillis,
+        previousRecords: previous,
+        now: now,
+      );
+      final record = PracticeRecord(
+        id: '${now.microsecondsSinceEpoch}',
+        category: sessionInfo.category,
+        mode: sessionInfo.mode,
+        difficulty: sessionInfo.difficulty,
+        clearTimeMillis: elapsedMillis,
+        playedAt: now,
+      );
+      await _recordRepository.addRecord(record);
+    }
+
     final result = PracticeResult(
       category: sessionInfo.category,
       mode: sessionInfo.mode,
@@ -297,22 +368,13 @@ class PracticeController extends ChangeNotifier {
       answeredCount: _answeredCount,
       correctCount: _correctCount,
       maxStreak: _maxStreak,
-      elapsedMillis: _elapsed.inMilliseconds,
+      elapsedMillis: elapsedMillis,
+      recordComparison: comparison,
     );
 
-    if (!(isManual && sessionInfo.mode == PracticeMode.timeAttack10)) {
-      _statsRepository.recordBest(
-        category: sessionInfo.category,
-        mode: sessionInfo.mode,
-        difficulty: sessionInfo.difficulty,
-        correctCount: _correctCount,
-        maxStreak: _maxStreak,
-        timeMillis: sessionInfo.mode == PracticeMode.timeAttack10
-            ? _elapsed.inMilliseconds
-            : null,
-      );
+    if (_disposed) {
+      return;
     }
-
     _onFinish(result);
   }
 
@@ -330,19 +392,19 @@ class PracticeController extends ChangeNotifier {
   }
 
   Future<void> _startCountdown() async {
-    _countdownText = 'よーい';
+    _countdownPhase = CountdownPhase.ready;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 1000));
     if (_disposed) {
       return;
     }
-    _countdownText = 'スタート！';
+    _countdownPhase = CountdownPhase.go;
     notifyListeners();
     await Future.delayed(const Duration(milliseconds: 800));
     if (_disposed) {
       return;
     }
-    _countdownText = null;
+    _countdownPhase = null;
     _readyToStart = true;
     _startTime = _clock.now();
     _startTicker();
@@ -354,10 +416,7 @@ class PracticeController extends ChangeNotifier {
     if (problem == null) {
       return false;
     }
-    return isCorrectInfoAnswer(
-      problem: problem,
-      input: _inputBuffer,
-    );
+    return isCorrectInfoAnswer(problem: problem, input: _inputBuffer);
   }
 
   @override

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../../widgets/pressable_surface.dart';
 import '../../../widgets/wavy_background.dart';
 import '../../practice/domain/enums.dart';
@@ -14,6 +15,7 @@ class HomePresentation extends StatelessWidget {
   const HomePresentation({
     super.key,
     required this.todayCorrect,
+    this.currentStreak = 0,
     required this.onSelectCategory,
     required this.onOpenStats,
     required this.onOpenRanking,
@@ -21,6 +23,7 @@ class HomePresentation extends StatelessWidget {
   });
 
   final int todayCorrect;
+  final int currentStreak;
   final void Function(Category category) onSelectCategory;
   final VoidCallback onOpenStats;
   final VoidCallback onOpenRanking;
@@ -28,12 +31,13 @@ class HomePresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          'ひたすら情報',
-          style: TextStyle(
+        title: Text(
+          l10n.appTitle,
+          style: const TextStyle(
             color: _cMain,
             fontWeight: FontWeight.w800,
             fontSize: 20,
@@ -50,7 +54,7 @@ class HomePresentation extends StatelessWidget {
               onOpenMenu();
             },
             icon: const Icon(Icons.menu, color: _cMain),
-            tooltip: 'メニュー',
+            tooltip: l10n.homeMenuTooltip,
           ),
         ],
       ),
@@ -116,9 +120,9 @@ class HomePresentation extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            '考えずに、慣れろ。',
-                            style: TextStyle(
+                          Text(
+                            l10n.homeTagline,
+                            style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w800,
                               color: _cMain,
@@ -126,12 +130,31 @@ class HomePresentation extends StatelessWidget {
                           ),
                           const SizedBox(height: 6),
                           Text(
-                            '今日の正解: $todayCorrect',
+                            l10n.homeTodayCorrect(todayCorrect),
                             style: const TextStyle(
                               color: _cGrayText,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                          if (currentStreak > 0) ...[
+                            const SizedBox(height: 6),
+                            Row(
+                              children: [
+                                const Text(
+                                  '🔥',
+                                  style: TextStyle(fontSize: 16),
+                                ),
+                                const SizedBox(width: 4),
+                                Text(
+                                  l10n.homeStreakDays(currentStreak),
+                                  style: const TextStyle(
+                                    color: _cMain,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ],
                       ),
                     ),
@@ -139,9 +162,9 @@ class HomePresentation extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
-                '単元をえらぶ',
-                style: TextStyle(
+              Text(
+                l10n.homeChooseCategory,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,
                   color: _cMain,
@@ -149,40 +172,40 @@ class HomePresentation extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               _CategoryCard(
-                title: '疑似コードの実行結果',
-                description: '変数の最終値・出力を追う',
+                title: l10n.categoryPseudocodeExecution,
+                description: l10n.categoryPseudocodeExecutionDesc,
                 imagePath: 'assets/images/code.png',
                 onTap: () => onSelectCategory(Category.pseudocodeExecution),
                 backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
-                title: 'if / for / while の処理追跡',
-                description: '分岐とループを読み解く',
+                title: l10n.categoryControlFlowTrace,
+                description: l10n.categoryControlFlowTraceDesc,
                 imagePath: 'assets/images/loop.png',
                 onTap: () => onSelectCategory(Category.controlFlowTrace),
                 backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
-                title: '2進数→10進数',
-                description: '2進数を10進数に変換',
+                title: l10n.categoryBinaryToDecimal,
+                description: l10n.categoryBinaryToDecimalDesc,
                 imagePath: 'assets/images/2_to_10.png',
                 onTap: () => onSelectCategory(Category.binaryToDecimal),
                 backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
-                title: '10進数→2進数',
-                description: '10進数を2進数に変換',
+                title: l10n.categoryDecimalToBinary,
+                description: l10n.categoryDecimalToBinaryDesc,
                 imagePath: 'assets/images/10_to_2.png',
                 onTap: () => onSelectCategory(Category.decimalToBinary),
                 backgroundImagePath: 'assets/images/sand_bk.jpg',
               ),
               const SizedBox(height: 12),
               _CategoryCard(
-                title: '2進数/10進数ミックス',
-                description: '変換がランダムに出題',
+                title: l10n.categoryBinaryMixed,
+                description: l10n.categoryBinaryMixedDesc,
                 imagePath: 'assets/images/2_and_10.png',
                 onTap: () => onSelectCategory(Category.binaryMixed),
                 backgroundImagePath: 'assets/images/sand_bk.jpg',

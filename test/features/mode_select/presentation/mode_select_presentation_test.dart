@@ -1,8 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:flutter_example_app/features/mode_select/presentation/mode_select_presentation.dart';
 import 'package:flutter_example_app/features/practice/domain/enums.dart';
+
+import '../../../helpers/localized_test_app.dart';
 
 void main() {
   testWidgets('ModeSelectPresentation updates selections and starts',
@@ -12,7 +13,7 @@ void main() {
     var started = false;
 
     await tester.pumpWidget(
-      MaterialApp(
+      LocalizedTestApp(
         home: ModeSelectPresentation(
           category: Category.pseudocodeExecution,
           mode: PracticeMode.infinite,

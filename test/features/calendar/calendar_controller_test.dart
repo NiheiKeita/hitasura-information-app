@@ -42,6 +42,8 @@ class FakeStatsRepository implements StatsRepository {
       last7DaysCorrect: 0,
       totalsAnswered: 0,
       totalsCorrect: 0,
+      currentStreak: 0,
+      bestStreak: 0,
       bestRecords: [],
     );
   }

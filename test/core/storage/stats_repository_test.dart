@@ -119,4 +119,102 @@ void main() {
     expect(infiniteBest?.bestCorrectCount, 12);
     expect(infiniteBest?.bestMaxStreak, 3);
   });
+
+  test('currentStreak counts consecutive active days up to today', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final repo = StatsRepositoryPrefs(prefs: prefs);
+
+    final today = DateTime(2024, 5, 10);
+    for (final offset in [2, 1, 0]) {
+      await repo.recordAnswer(
+        date: today.subtract(Duration(days: offset)),
+        category: Category.pseudocodeExecution,
+        mode: PracticeMode.infinite,
+        correct: true,
+      );
+    }
+
+    final summary = await repo.loadSummary(now: today);
+    expect(summary.currentStreak, 3);
+    expect(summary.bestStreak, 3);
+  });
+
+  test('currentStreak persists when today has no answers yet', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final repo = StatsRepositoryPrefs(prefs: prefs);
+
+    final today = DateTime(2024, 5, 10);
+    for (final offset in [2, 1]) {
+      await repo.recordAnswer(
+        date: today.subtract(Duration(days: offset)),
+        category: Category.pseudocodeExecution,
+        mode: PracticeMode.infinite,
+        correct: true,
+      );
+    }
+
+    final summary = await repo.loadSummary(now: today);
+    expect(summary.currentStreak, 2);
+  });
+
+  test('currentStreak resets when there is a gap', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final repo = StatsRepositoryPrefs(prefs: prefs);
+
+    final today = DateTime(2024, 5, 10);
+    await repo.recordAnswer(
+      date: today.subtract(const Duration(days: 3)),
+      category: Category.pseudocodeExecution,
+      mode: PracticeMode.infinite,
+      correct: true,
+    );
+    await repo.recordAnswer(
+      date: today,
+      category: Category.pseudocodeExecution,
+      mode: PracticeMode.infinite,
+      correct: true,
+    );
+
+    final summary = await repo.loadSummary(now: today);
+    expect(summary.currentStreak, 1);
+  });
+
+  test('bestStreak retains the maximum after the streak breaks', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final repo = StatsRepositoryPrefs(prefs: prefs);
+
+    final today = DateTime(2024, 5, 10);
+    for (final offset in [5, 4, 3]) {
+      await repo.recordAnswer(
+        date: today.subtract(Duration(days: offset)),
+        category: Category.pseudocodeExecution,
+        mode: PracticeMode.infinite,
+        correct: true,
+      );
+    }
+    await repo.recordAnswer(
+      date: today,
+      category: Category.pseudocodeExecution,
+      mode: PracticeMode.infinite,
+      correct: true,
+    );
+
+    final summary = await repo.loadSummary(now: today);
+    expect(summary.currentStreak, 1);
+    expect(summary.bestStreak, 3);
+  });
+
+  test('currentStreak is zero when nothing recorded', () async {
+    SharedPreferences.setMockInitialValues({});
+    final prefs = await SharedPreferences.getInstance();
+    final repo = StatsRepositoryPrefs(prefs: prefs);
+
+    final summary = await repo.loadSummary(now: DateTime(2024, 5, 10));
+    expect(summary.currentStreak, 0);
+    expect(summary.bestStreak, 0);
+  });
 }

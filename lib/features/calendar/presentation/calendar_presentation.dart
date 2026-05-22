@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../core/l10n/l10n.dart';
 import '../../../core/storage/stats_repository.dart';
 import '../../practice/domain/enums.dart';
 import '../../../widgets/wavy_background.dart';
@@ -32,13 +33,14 @@ class CalendarPresentation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final dates = _buildCalendarDates(focusedMonth);
     return Scaffold(
       backgroundColor: _cBg,
       appBar: AppBar(
-        title: const Text(
-          '学習カレンダー',
-          style: TextStyle(color: _cMain, fontWeight: FontWeight.w800),
+        title: Text(
+          l10n.calendarTitle,
+          style: const TextStyle(color: _cMain, fontWeight: FontWeight.w800),
         ),
         backgroundColor: _cBg,
         elevation: 0,
@@ -64,7 +66,7 @@ class CalendarPresentation extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
             children: [
               _MonthHeader(
-                label: _formatMonth(focusedMonth),
+                label: l10n.calendarMonthFormat(focusedMonth.year, focusedMonth.month),
                 onPrev: onPrevMonth,
                 onNext: onNextMonth,
               ),
@@ -87,10 +89,6 @@ class CalendarPresentation extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String _formatMonth(DateTime month) {
-    return '${month.year}年${month.month}月';
   }
 
   List<DateTime?> _buildCalendarDates(DateTime month) {
@@ -118,6 +116,7 @@ class CalendarDayDetailSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     final dateText = _formatDate(date);
     final data = stats;
     final hasStudy = data != null && data.answered > 0;
@@ -155,22 +154,26 @@ class CalendarDayDetailSheet extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             if (!hasStudy)
-              const Text(
-                'この日はまだ解いていません',
-                style: TextStyle(
+              Text(
+                l10n.calendarNoStudy,
+                style: const TextStyle(
                   color: _cGrayText,
                   fontWeight: FontWeight.w600,
                 ),
               )
             else ...[
-              _SummaryRow(label: '正解数', value: '${data.correct}問'),
+              _SummaryRow(
+                label: l10n.calendarCorrectCount,
+                value: l10n.calendarQuestionCount(data.correct),
+              ),
               const SizedBox(height: 12),
-              const Text(
-                '正解内訳',
-                style: TextStyle(color: _cMain, fontWeight: FontWeight.w700),
+              Text(
+                l10n.calendarBreakdown,
+                style: const TextStyle(
+                    color: _cMain, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 6),
-              ..._buildCategoryBreakdown(data),
+              ..._buildCategoryBreakdown(context, data),
             ],
           ],
         ),
@@ -185,29 +188,15 @@ class CalendarDayDetailSheet extends StatelessWidget {
     return '$year/$month/$day';
   }
 
-  List<Widget> _buildCategoryBreakdown(DailyStats data) {
+  List<Widget> _buildCategoryBreakdown(BuildContext context, DailyStats data) {
+    final l10n = context.l10n;
     final counts = _correctCategoryCounts(data);
     return [
-      _SummaryRow(
-        label: '疑似コードの実行結果',
-        value: '${counts[Category.pseudocodeExecution] ?? 0}問',
-      ),
-      _SummaryRow(
-        label: 'if / for / while の処理追跡',
-        value: '${counts[Category.controlFlowTrace] ?? 0}問',
-      ),
-      _SummaryRow(
-        label: '2進数→10進数',
-        value: '${counts[Category.binaryToDecimal] ?? 0}問',
-      ),
-      _SummaryRow(
-        label: '10進数→2進数',
-        value: '${counts[Category.decimalToBinary] ?? 0}問',
-      ),
-      _SummaryRow(
-        label: '2進数/10進数ミックス',
-        value: '${counts[Category.binaryMixed] ?? 0}問',
-      ),
+      for (final category in Category.values)
+        _SummaryRow(
+          label: category.label(l10n),
+          value: l10n.calendarQuestionCount(counts[category] ?? 0),
+        ),
     ];
   }
 
@@ -321,7 +310,16 @@ class _MonthHeader extends StatelessWidget {
 class _WeekdayRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    const labels = ['日', '月', '火', '水', '木', '金', '土'];
+    final l10n = context.l10n;
+    final labels = [
+      l10n.weekdaySun,
+      l10n.weekdayMon,
+      l10n.weekdayTue,
+      l10n.weekdayWed,
+      l10n.weekdayThu,
+      l10n.weekdayFri,
+      l10n.weekdaySat,
+    ];
     return Row(
       children: [
         for (final label in labels)

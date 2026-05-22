@@ -1,0 +1,4 @@
+enum CountdownPhase {
+  ready,
+  go,
+}
